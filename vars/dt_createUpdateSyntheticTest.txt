@@ -1,0 +1,7 @@
+## createUpdateSyntheticTest
+Used to create a synthetic test in Dynatrace
+
+### *usage:*
+errorCode=dt_createUpdateSyntheticTest(frequency, testName, url, method, location)
+if(errorCode > 0)
+  error "Create or update Synthetic monitor in Dynatrace failed"
