@@ -1,0 +1,7 @@
+## runSh
+Used to provide a way to capture the output of a sh command as a variable
+
+### *usage:*
+variable=runSh("COMMAND_TO_EXECUTE")
+String date=runSh("date")
+String directoryListing=runSh("ls -l")
