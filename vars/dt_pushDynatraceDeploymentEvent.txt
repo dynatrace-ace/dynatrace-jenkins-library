@@ -1,0 +1,7 @@
+## pushDynatraceDeploymentEvent
+Used to push a Deployment Event to Dynatrace
+
+### *usage:*
+errorCode=pushDynatraceDeploymentEvent(tagRule)
+if(errorCode != 0)
+  error "Pushing event to Dynatrace failed"
