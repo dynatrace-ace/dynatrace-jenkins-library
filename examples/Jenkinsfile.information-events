@@ -1,0 +1,69 @@
+@Library('dynatrace@master') _
+
+def tagMatchRules = [
+  [
+    meTypes: [
+      [meType: 'SERVICE']
+    ],
+    tags: [
+      [context: 'CONTEXTLESS', key: 'project', value: 'demo'],
+      [context: 'CONTEXTLESS', key: 'stage', value: 'dev'],
+      [context: 'CONTEXTLESS', key: 'service', value: 'simple-web-app-1']
+    ]
+  ]
+]
+
+pipeline {
+    agent any
+    stages {
+        stage('deploy') {
+            steps {
+                script {
+                    def status = pushDynatraceDeploymentEvent (
+                      tagRule: tagMatchRules,
+                      deploymentName: "myDeploymentJob: ${env.JOB_NAME}",
+                      deploymentVersion: '1',
+                      deploymentProject: 'myDeploymentProject',
+                      remediationAction: 'myRemediationAction',
+                      customProperties : [
+                        [key: 'Jenkins Build Number', value: "${env.BUILD_ID}"],
+                        [key: 'Git commit', value: "${env.GIT_COMMIT}"]
+                      ]
+                    )
+                  }
+            }
+        }
+        stage('configure') {
+            steps {
+                script {
+                    def status = pushDynatraceConfigurationEvent (
+                      tagRule: tagMatchRules,
+                      configuration: 'myConfiguration',
+                      description: 'myDescription',
+                      source : 'mySource',
+                      customProperties : [
+                        [key: 'Jenkins Build Number', value: "${env.BUILD_ID}"],
+                        [key: 'Git commit', value: "${env.GIT_COMMIT}"]
+                      ]
+                    )
+                  }
+            }
+        }
+        stage('info') {
+            steps {
+                script {
+                    def status = pushDynatraceInfoEvent (
+                      tagRule: tagMatchRules,
+                      title: 'myTitle',
+                      description: 'myDescription',
+                      source : 'mySource',
+                      customProperties : [
+                        [key: 'Jenkins Build Number', value: "${env.BUILD_ID}"],
+                        [key: 'Git commit', value: "${env.GIT_COMMIT}"]
+                      ]
+                    )
+                  }
+            }
+        }
+    }
+}
