@@ -2,9 +2,9 @@
 
 This Groovy based library provides functions that can be used in your Jenkins pipelines that call the Dynatrace API.  
 
-Use cases:
-
-* **Information Events** Send deployments, configuration changes, and testing activity for monitored services as [Dynatrace Events](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event). 
+Use Cases:
+* **Information Events** Send deployments, configuration changes, and testing activity for monitored services. [Review Dynatrace API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event). 
+* **Synthetic monitor** Create synthetic HTTP monitors to check the availability of your resources—websites or API endpoints. [Learn more](https://www.dynatrace.com/support/help/how-to-use-dynatrace/synthetic-monitoring/http-monitors/create-an-http-monitor/). [Review Dynatrace API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/synthetic/synthetic-monitors/post-a-monitor/)
 
 # Setup
 
@@ -57,15 +57,17 @@ The Dynatrace URL and API token are configured in Jenkins or passed to various l
 
 See example Jenkinsfiles in the [examples folder](examples)
 
-## Available functions
+Library function Categories:
+* [Information Events functions](#Information-Events-functions)
+* [Synthetic HTTP monitor functions](#Synthetic-HTTP-monitor-functions)
+
+## Information Events functions
 
 | Library Function | Description |
 | --- | --- |
 | pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
 | pushDynatraceConfigurationEvent | Used to push a Configuration Changed Event to Dynatrace |
 | pushDynatraceInfoEvent | Used to push a Info  Event to Dynatrace |
-
-## Information Events functions
 
 These functions work best with a [TagRule](https://www.dynatrace.com/support/help/shortlink/api-events-post-event#events-post-parameter-tagmatchrule) as to target a specific service using [Dynatrace tags](https://www.dynatrace.com/support/help/how-to-use-dynatrace/tags-and-metadata/).  
 
@@ -114,3 +116,20 @@ Running on Jenkins in /var/jenkins_home/workspace/test
 Here is what created events look like in Dynatrace.
 
 ![](./images/events.png)
+
+
+## Synthetic HTTP monitor functions
+
+| Library Function | Description |
+| --- | --- |
+| dt_createUpdateSyntheticTest | Used to create or update an existing synthetic test in Dynatrace based on test name |
+
+The result is a HTTP monitor for a specified location, frequency and URL as shown below:
+
+![](./images/monitor.png)
+
+The **location** string is required and can be obtained from the [Dynatrace get locations API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/synthetic/synthetic-locations/get-all-locations/). The Dynatace Swagger Web UI, is a quick way to get available locations.
+
+![](./images/monitor-api.png)
+
+

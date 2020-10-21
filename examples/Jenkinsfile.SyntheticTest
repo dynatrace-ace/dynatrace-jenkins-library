@@ -1,0 +1,20 @@
+@Library('dynatrace@master') _
+
+pipeline {
+    agent any
+    stages {
+        stage('create-test') {
+            steps {
+                script {
+                    def status = dt_createUpdateSyntheticTest (
+                      testName: 'Dynatrace monitor',
+                      url: 'https://www.dynatrace.com',
+                      method: 'GET',
+                      frequency: '1',
+                      location: 'GEOLOCATION-4DBE735F24F26BD5'
+                    )
+                  }
+            }
+        }
+    }
+}
