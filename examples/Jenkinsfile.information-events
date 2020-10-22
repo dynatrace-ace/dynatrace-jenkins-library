@@ -1,65 +1,58 @@
-@Library('dynatrace@master') _
+@Library("dynatrace@master") _
 
-def tagMatchRules = [
-  [
-    meTypes: [
-      [meType: 'SERVICE']
-    ],
-    tags: [
-      [context: 'CONTEXTLESS', key: 'project', value: 'demo'],
-      [context: 'CONTEXTLESS', key: 'stage', value: 'dev'],
-      [context: 'CONTEXTLESS', key: 'service', value: 'simple-web-app-1']
-    ]
+def tagMatchRules = [[
+  "meTypes": [ "SERVICE"],
+  tags: [
+    ["context": "CONTEXTLESS", "key": "project", "value": "demo"],
+    ["context": "CONTEXTLESS", "key": "stage", "value": "dev"],
+    ["context": "CONTEXTLESS", "key": "service", "value": "simple-web-app-1"]
   ]
-]
+]]
 
 pipeline {
     agent any
     stages {
-        stage('deploy') {
+        stage("deploy") {
             steps {
                 script {
-                    def status = pushDynatraceDeploymentEvent (
+                    def status = dt_pushDynatraceDeploymentEvent (
                       tagRule: tagMatchRules,
                       deploymentName: "myDeploymentJob: ${env.JOB_NAME}",
-                      deploymentVersion: '1',
-                      deploymentProject: 'myDeploymentProject',
-                      remediationAction: 'myRemediationAction',
+                      deploymentVersion: "myDeploymentVersion",
+                      deploymentProject: "myDeploymentProject",
+                      remediationAction: "myRemediationAction",
                       customProperties : [
-                        [key: 'Jenkins Build Number', value: "${env.BUILD_ID}"],
-                        [key: 'Git commit', value: "${env.GIT_COMMIT}"]
+                        "Jenkins Build Number": env.BUILD_ID
                       ]
                     )
                   }
             }
         }
-        stage('configure') {
+        stage("configure") {
             steps {
                 script {
-                    def status = pushDynatraceConfigurationEvent (
+                    def status = dt_pushDynatraceConfigurationEvent (
                       tagRule: tagMatchRules,
-                      configuration: 'myConfiguration',
-                      description: 'myDescription',
-                      source : 'mySource',
+                      configuration: "myConfiguration",
+                      description: "myDescription",
+                      source : "mySource",
                       customProperties : [
-                        [key: 'Jenkins Build Number', value: "${env.BUILD_ID}"],
-                        [key: 'Git commit', value: "${env.GIT_COMMIT}"]
+                        "Jenkins Build Number": env.BUILD_ID
                       ]
                     )
                   }
             }
         }
-        stage('info') {
+        stage("info") {
             steps {
                 script {
-                    def status = pushDynatraceInfoEvent (
+                    def status = dt_pushDynatraceInfoEvent (
                       tagRule: tagMatchRules,
-                      title: 'myTitle',
-                      description: 'myDescription',
-                      source : 'mySource',
+                      title: "myTitle",
+                      description: "myDescription",
+                      source : "mySource",
                       customProperties : [
-                        [key: 'Jenkins Build Number', value: "${env.BUILD_ID}"],
-                        [key: 'Git commit', value: "${env.GIT_COMMIT}"]
+                        "Jenkins Build Number": env.BUILD_ID
                       ]
                     )
                   }

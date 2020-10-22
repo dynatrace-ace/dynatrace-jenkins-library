@@ -3,8 +3,12 @@
 This Groovy based library provides functions that can be used in your Jenkins pipelines that call the Dynatrace API.  
 
 Use Cases:
-* **Information Events** Send deployments, configuration changes, and testing activity for monitored services. [Review Dynatrace API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event). 
-* **Synthetic monitor** Create synthetic HTTP monitors to check the availability of your resources—websites or API endpoints. [Learn more](https://www.dynatrace.com/support/help/how-to-use-dynatrace/synthetic-monitoring/http-monitors/create-an-http-monitor/). [Review Dynatrace API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/synthetic/synthetic-monitors/post-a-monitor/)
+
+**1. Push Information Events** 
+  * Send deployments, configuration changes, and testing activity for monitored services. [Review Dynatrace API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event). 
+
+**2. Add Synthetic monitor** 
+  * Create synthetic HTTP monitors to check the availability of your resources—websites or API endpoints. [Learn more](https://www.dynatrace.com/support/help/how-to-use-dynatrace/synthetic-monitoring/http-monitors/create-an-http-monitor/). [Review Dynatrace API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/synthetic/synthetic-monitors/post-a-monitor/)
 
 # Setup
 
@@ -61,15 +65,17 @@ Library function Categories:
 * [Information Events functions](#Information-Events-functions)
 * [Synthetic HTTP monitor functions](#Synthetic-HTTP-monitor-functions)
 
+<HR>
+
 ## Information Events functions
 
 | Library Function | Description |
 | --- | --- |
-| pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
-| pushDynatraceConfigurationEvent | Used to push a Configuration Changed Event to Dynatrace |
-| pushDynatraceInfoEvent | Used to push a Info  Event to Dynatrace |
+| dt_pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
+| dt_pushDynatraceConfigurationEvent | Used to push a Configuration Changed Event to Dynatrace |
+| dt_pushDynatraceInfoEvent | Used to push a Info  Event to Dynatrace |
 
-These functions work best with a [TagRule](https://www.dynatrace.com/support/help/shortlink/api-events-post-event#events-post-parameter-tagmatchrule) as to target a specific service using [Dynatrace tags](https://www.dynatrace.com/support/help/how-to-use-dynatrace/tags-and-metadata/).  
+These functions work best with a [TagRule](https://www.dynatrace.com/support/help/shortlink/api-events-post-event#events-post-parameter-tagmatchrule) as to target specific services using [Dynatrace tags](https://www.dynatrace.com/support/help/how-to-use-dynatrace/tags-and-metadata/).  
 
 Here is an example service with a few tags.
 
@@ -78,45 +84,30 @@ Here is an example service with a few tags.
 Here is an example rule for a service.
 
 ```
-def tagMatchRules = [
-  [
-    meTypes: [
-      [meType: 'SERVICE']
-    ],
-    tags: [
-      [context: 'CONTEXTLESS', key: 'project', value: 'demo'],
-      [context: 'CONTEXTLESS', key: 'stage', value: 'dev'],
-      [context: 'CONTEXTLESS', key: 'service', value: 'simple-web-app-1']
-    ]
+def tagMatchRules = [[
+  "meTypes": [ "SERVICE"],
+  tags: [
+    ["context": "CONTEXTLESS", "key": "project", "value": "demo"],
+    ["context": "CONTEXTLESS", "key": "stage", "value": "dev"],
+    ["context": "CONTEXTLESS", "key": "service", "value": "simple-web-app-1"]
   ]
-]
+]]
 ```
 
-Here is what the Jenkins job output looks like. You want to see **storedEventIds** that indicate an event was created
+In addition to the to required fields, additonal properties can be added too, for example:
 
 ```
-Running on Jenkins in /var/jenkins_home/workspace/test
-[Pipeline] {
-[Pipeline] stage
-[Pipeline] { (deploy)
-[Pipeline] script
-[Pipeline] {
-[Pipeline] echo
-[Pipeline] sh
-+ curl -X POST https://XXXXX.com/api/v1/events?Api-Token=YYYY -H accept: application/json -H Content-Type: application/json -d { "eventType": "CUSTOM_DEPLOYMENT", "attachRules": { "tagRule" : [{ "meTypes" : ["SERVICE"], "tags" : [ { "context" : "CONTEXTLESS", "key" : "project", "value" : "demo" }, { "context" : "CONTEXTLESS", "key" : "stage", "value" : "dev" }, { "context" : "CONTEXTLESS", "key" : "service", "value" : "simple-web-app-1" } ] }] }, "deploymentName":"myDeploymentJob: test", "deploymentVersion":"1", "deploymentProject":"myDeploymentProject", "ciBackLink":"http://localhost:8080/job/test/30/", "remediationAction":"myRemediationAction", "source":"Jenkins", "customProperties": { "Jenkins Build Number": "30", "Git commit": "null"} }
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
-100   739  100   116  100   623    232   1246 --:--:-- --:--:-- --:--:--  1248
-{"storedEventIds":[6029523590365053785],"storedIds":["6029523590365053785_1603298823550"],"storedCorrelationIds":[]}
-[Pipeline] }
+customProperties : [
+    "Jenkins Build Number": env.BUILD_ID,
+    "GIT COMMIT": env.GIT_COMMIT
+  ]
 ```
 
 Here is what created events look like in Dynatrace.
 
 ![](./images/events.png)
 
+<HR>
 
 ## Synthetic HTTP monitor functions
 
