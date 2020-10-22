@@ -1,14 +1,23 @@
 # Overview
 
-This Groovy based library provides functions that can be used in your Jenkins pipelines that call the Dynatrace API.  
+Jenkins shared library for integrating calls the Dynatrace API with your Jenkins Pipelines.
 
-Use Cases:
+## Usage
+
+This directive, `@Library('dynatrace@master') _` is added to the top of a Jenkinsfile script to load the Dynatrace library. Then within the various pipeline stages, Dynatrace library functions are called with the required and optional parameters that map to the required by the Dynatrace API requests.  The Dynatrace URL and API token is configured within Jenkins or can be optionally passed as a parameter to the function call. 
+
+## Library functions:
 
 **1. Push Information Events** 
-  * Send deployments, configuration changes, and testing activity for monitored services. [Review Dynatrace API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event). 
+  * Send deployments, configuration changes, and testing activity for monitored services. 
+  * [Information Events](PUSHEVENTS.md) usage details
+  * [Dynatrace API Documentation](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event)
 
-**2. Add Synthetic monitor** 
-  * Create synthetic HTTP monitors to check the availability of your resources—websites or API endpoints. [Learn more](https://www.dynatrace.com/support/help/how-to-use-dynatrace/synthetic-monitoring/http-monitors/create-an-http-monitor/). [Review Dynatrace API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/synthetic/synthetic-monitors/post-a-monitor/)
+**2. Synthetic Monitors** 
+  * Create synthetic HTTP monitors to check the availability of your resources—websites or API endpoints.
+  * [Synthetic HTTP monitor](HTTPMONITOR.md) usage details
+  * [Dynatrace HTTP monitor Documentation](https://www.dynatrace.com/support/help/how-to-use-dynatrace/synthetic-monitoring/http-monitors/create-an-http-monitor/)
+  * [Dynatrace API Documentation](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/synthetic/synthetic-monitors/post-a-monitor/)
 
 # Setup
 
@@ -46,6 +55,12 @@ If you don't have Dynatrace, then sign up for a [free trial](https://www.dynatra
 
     ![](./images/config-lib.png)
 
+## Configure the Dynatrace URL and API Token
+
+The Dynatrace URL and API Token can be passed into the function calls, but by default they look for Jenkins global environment variables for these values.  To configure the Jenkins environment variables:
+
+1. Login to Jenkins 
+1. Navigate to Manage Jenkins > Configure System
 1. Find the **Global properties** section, click the **Environment variables** checkbox and add these two variables as shown below 
 
     * DT_API_TOKEN = The API token created for you Dynatrace tenant
@@ -55,72 +70,7 @@ If you don't have Dynatrace, then sign up for a [free trial](https://www.dynatra
 
 1. Save settings
 
-# Usage
 
-The Dynatrace URL and API token are configured in Jenkins or passed to various library function.  Each function takes various parameters that are required by the Dynatrace API.  Within the Jenkinsfile, the library is added with this directive: `@Library('dynatrace@master') _` added to the top of the script.
 
-See example Jenkinsfiles in the [examples folder](examples)
-
-Library function Categories:
-* [Information Events functions](#Information-Events-functions)
-* [Synthetic HTTP monitor functions](#Synthetic-HTTP-monitor-functions)
-
-<HR>
-
-## Information Events functions
-
-| Library Function | Description |
-| --- | --- |
-| dt_pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
-| dt_pushDynatraceConfigurationEvent | Used to push a Configuration Changed Event to Dynatrace |
-| dt_pushDynatraceInfoEvent | Used to push a Info  Event to Dynatrace |
-
-These functions work best with a [TagRule](https://www.dynatrace.com/support/help/shortlink/api-events-post-event#events-post-parameter-tagmatchrule) as to target specific services using [Dynatrace tags](https://www.dynatrace.com/support/help/how-to-use-dynatrace/tags-and-metadata/).  
-
-Here is an example service with a few tags.
-
-![](./images/service.png)
-
-Here is an example rule for a service.
-
-```
-def tagMatchRules = [[
-  "meTypes": [ "SERVICE"],
-  tags: [
-    ["context": "CONTEXTLESS", "key": "project", "value": "demo"],
-    ["context": "CONTEXTLESS", "key": "stage", "value": "dev"],
-    ["context": "CONTEXTLESS", "key": "service", "value": "simple-web-app-1"]
-  ]
-]]
-```
-
-In addition to the to required fields, additonal properties can be added too, for example:
-
-```
-customProperties : [
-    "Jenkins Build Number": env.BUILD_ID,
-    "GIT COMMIT": env.GIT_COMMIT
-  ]
-```
-
-Here is what created events look like in Dynatrace.
-
-![](./images/events.png)
-
-<HR>
-
-## Synthetic HTTP monitor functions
-
-| Library Function | Description |
-| --- | --- |
-| dt_createUpdateSyntheticTest | Used to create or update an existing synthetic test in Dynatrace based on test name |
-
-The result is a HTTP monitor for a specified location, frequency and URL as shown below:
-
-![](./images/monitor.png)
-
-The **location** string is required and can be obtained from the [Dynatrace get locations API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/synthetic/synthetic-locations/get-all-locations/). The Dynatace Swagger Web UI, is a quick way to get available locations.
-
-![](./images/monitor-api.png)
 
 
