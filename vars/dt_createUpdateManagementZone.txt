@@ -1,7 +1,0 @@
-## dt_createUpdateManagementZone
-Used to create a synthetic test in Dynatrace
-
-### *usage:*
-errorCode=dt_createUpdateManagementZone(managementZoneName, ruleType, managementZoneConditions)
-if(errorCode > 0)
-  error "Create or update management zone in Dynatrace failed"

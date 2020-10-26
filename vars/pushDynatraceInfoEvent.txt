@@ -1,7 +1,0 @@
-## pushDynatraceInfoEvent
-Used to push a Info  Event to Dynatrace
-
-### *usage:*
-errorCode=pushDynatraceInfoEvent(tagRule)
-if(errorCode > 0)
-  error "Pushing event to Dynatrace failed"

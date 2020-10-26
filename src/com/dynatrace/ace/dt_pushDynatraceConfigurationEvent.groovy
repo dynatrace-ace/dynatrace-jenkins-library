@@ -1,10 +1,3 @@
-@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
-
-import groovyx.net.http.HTTPBuilder
-import groovy.json.JsonOutput
-import static groovyx.net.http.Method.*
-import static groovyx.net.http.ContentType.*
-
 /***************************\
   This function assumes we run on a standard Jenkins Agent.
 
@@ -42,27 +35,21 @@ def call(Map args){
       customProperties: customProperties
     ]
 
-    def http = new HTTPBuilder( dtTenantUrl + '/api/v1/events' );
+    def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
+      customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
+      httpMode: 'POST',
+      requestBody: toJson(postBody),
+      responseHandle: 'STRING',
+      url: "${dtTenantUrl}/api/v1/events",
+      validResponseCodes: "200",
+      ignoreSslErrors: true
 
-    http.request( POST, JSON ) { req ->
-      headers.'Authorization' = 'Api-Token ' + dtApiToken
-      headers.'Content-Type' = 'application/json'
-      body = postBody
-
-      response.success = { resp, json ->
-        echo "Configuration Event Posted Successfully! ${resp.status}"
+      if (createEventResponse.status == 200) {
+        echo "Custom info event posted successfully!"
+      } else {
+        echo "Failed To post event:" + createEventResponse.content
+        return false
       }
-      response.failure = { resp, json ->
-        echo """[dt_pushDynatraceConfigurationEvent] Failed To Post Event: ${resp.statusLine}
-          HTTP Message: ${resp.statusLine}"
-          JSON: ${json.toMapString()}"
-          API Message: ${json && json.error && json.error.message ? json.error.message : 'N/A'}"
-          <------"
-          POST Body: ${postBody.toMapString()}"""
 
-        return 1
-      }
-    }
-
-    return 0
+    return true
 }

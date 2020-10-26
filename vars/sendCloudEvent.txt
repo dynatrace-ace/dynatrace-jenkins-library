@@ -1,7 +1,0 @@
-## pushDynatraceDeploymentEvent
-Used to send a CloudEvent 
-
-### *usage:*
-errorCode=sendCloudEvent(tagRule)
-if(errorCode > 0)
-  error "Sending CloudEvent failed"
