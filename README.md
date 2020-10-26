@@ -63,18 +63,39 @@ If you don't have Dynatrace, then sign up for a [free trial](https://www.dynatra
 
 ## Configure the Dynatrace URL and API Token
 
-The Dynatrace URL and API Token can be passed into the function calls, but by default they look for Jenkins global environment variables for these values.  To configure the Jenkins environment variables:
+The Dynatrace URL and API Token can be passed into the function calls, but by default they look for Jenkins environment variables for these values. 
+
+These values can be set in the **Global properties** section of Jenkins, but the recommended way is to configure these secrets as **Global credentials** so that Jenkins masks the value in any Jenkins logs.  Below are the instructions for this approach. 
 
 1. Login to Jenkins 
-1. Navigate to Manage Jenkins > Configure System
-1. Find the **Global properties** section, click the **Environment variables** checkbox and add these two variables as shown below 
+1. Navigate to Manage Jenkins > Manage Credentials
+1. Click on the **(global)** scope within the **Stores scoped to Jenksins** section.
+1. Click the **Add creditials** menu optioj
 
-    * DT_API_TOKEN = The API token created for you Dynatrace tenant
-    * DT_TENANT_URL = The URL to your Dynatrace tenant      
+    ![](./images/creds-menu.png)
 
-    ![](./images/config-env.png)
+1. Fill in the values as follows:
 
-1. Save settings
+    1 . Kind = Secret Text
+
+    2 . Secret = The URL to your Dynatrace tenant
+    
+    3 . ID = DT_TENANT_URL
+  
+  ![](./images/creds-secret.png)
+
+1. Click **OK** to save. Then click the **Add creditials** menu option again
+1. Fill in the values as follows:
+
+    1 . Kind = Secret Text
+
+    2 . Secret = The API token created for you Dynatrace tenant
+
+    3 . ID = DT_API_TOKEN
+
+1. Click **OK** to save. When you are done, you should see this.
+
+    ![](./images/creds-list.png)
 
 # Support
 

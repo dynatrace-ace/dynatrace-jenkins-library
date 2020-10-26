@@ -54,6 +54,10 @@ def dashboardTileRules = [
 
 pipeline {
     agent any
+    environment {
+        DT_TENANT_URL = credentials('DT_TENANT_URL')
+        DT_API_TOKEN = credentials('DT_API_TOKEN')
+    }
     stages {
         stage('http-monitor') {
             steps {
