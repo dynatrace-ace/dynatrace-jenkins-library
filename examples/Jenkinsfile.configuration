@@ -1,0 +1,112 @@
+// replace 'master' with the library version you are using
+@Library('dynatrace@master') _
+
+def mzConditions = [
+    [
+        key: [ attribute: 'SERVICE_TAGS' ],
+        comparisonInfo: [ type: 'TAG', operator: 'EQUALS',
+            value: [ context: 'CONTEXTLESS', key: 'project', value: 'simpleproject' ],
+            negate: false
+        ]
+    ],
+    [
+        key: [ attribute: 'PROCESS_GROUP_PREDEFINED_METADATA', dynamicKey: 'KUBERNETES_NAMESPACE', type: 'PROCESS_PREDEFINED_METADATA_KEY' ],
+        comparisonInfo: [ type: 'STRING', operator: 'EQUALS', value: 'staging', negate: false, caseSensitive: false ]
+    ]
+]
+
+def dashboardTileRules = [
+    [
+        name : 'Service health', tileType : 'SERVICES', configured : true, filterConfig: null, chartVisible: true,
+        bounds : [ top: 38, left : 0, width: 304, height: 304 ],
+        tileFilter : [ timeframe : null, managementZone : null ]
+            
+    ],
+    [
+        name : 'Custom chart', tileType : 'CUSTOM_CHARTING', configured : true, chartVisible: true,
+        bounds : [ top: 38, left : 342, width: 494, height: 304 ],
+        tileFilter : [ timeframe : null, managementZone : null ],
+        filterConfig : [ type : 'MIXED', customName: 'Response time', defaultName: 'Custom chart', 
+            chartConfig : [
+                legendShown : true, type : 'TIMESERIES', resultMetadata : [:],
+                series : [
+                    [ metric: 'builtin:service.response.time', aggregation: 'AVG', percentile: null, type : 'BAR', entityType : 'SERVICE', dimensions : [], sortAscending : false, sortColumn : true, aggregationRate : 'TOTAL' ]
+                ],
+            ],
+        filtersPerEntityType: [:]
+        ]
+    ],
+    [
+        name : 'Custom chart', tileType : 'CUSTOM_CHARTING', configured : true, chartVisible: true,
+        bounds : [ top: 38, left : 874, width: 494, height: 304 ],
+        tileFilter : [ timeframe : null, managementZone : null ],
+        filterConfig : [ type : 'MIXED', customName: 'Failure rate (any  errors)', defaultName: 'Custom chart', 
+            chartConfig : [
+                legendShown : true, type : 'TIMESERIES', resultMetadata : [:],
+                series : [
+                    [ metric: 'builtin:service.errors.total.rate', aggregation: 'AVG', percentile: null, type : 'BAR', entityType : 'SERVICE', dimensions : [], sortAscending : false, sortColumn : true, aggregationRate : 'TOTAL' ]
+                ],
+            ],
+        filtersPerEntityType: [:]
+        ]
+    ]
+]
+
+pipeline {
+    agent any
+    stages {
+        stage('http-monitor') {
+            steps {
+                script {
+                    def status = dt_createUpdateSyntheticTest (
+                      testName: 'Dynatrace monitor',
+                      url: 'https://www.dynatrace.com',
+                      method: 'GET',
+                      frequency: '1',
+                      location: 'GEOLOCATION-4DBE735F24F26BD5'
+                    )
+                  }
+            }
+        }
+        stage('mz') {
+            steps {
+                script {
+                    def (int status, String dt_mngtZoneId) = dt_createUpdateManagementZone (
+                    managementZoneName : 'SimpleProject Staging',
+                    ruleType : 'SERVICE',
+                    managementZoneConditions : mzConditions,
+                    )
+                    DT_MGMTZONEID = dt_mngtZoneId
+                  }
+            }
+        }
+        stage('dashboard') {
+            steps {
+                script {
+                    def status = dt_createUpdateDashboard (
+                        dashboardName : 'simpleproject-staging',
+                        dashboardManagementZoneName : 'SimpleProject Staging',
+                        dashboardManagementZoneId : "${DT_MGMTZONEID}",
+                        dashboardShared : true,
+                        dashboardLinkShared : true,
+                        dashboardPublished : true,
+                        dashboardTimeframe : '-30m',
+                        dtDashboardTiles : dashboardTileRules
+                    )
+                  }
+            }
+        }
+        stage('detection-rule') {
+            steps {
+                script {
+                    def status = dt_createUpdateAppDetectionRule (
+                        dtAppName : "myApp",
+                        pattern : "http://myDomain",
+                        applicationMatchType: "CONTAINS",
+                        applicationMatchTarget: "URL"
+                    )
+                  }
+            }
+        }
+    }
+}

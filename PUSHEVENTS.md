@@ -1,5 +1,7 @@
 # Information Events
 
+Send deployment, configuration, and testing context for monitored services using the [Dynatrace API](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event).
+
 Below is what Dynatrace events look like.
 
 ![](./images/events.png)

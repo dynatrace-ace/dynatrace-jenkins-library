@@ -4,20 +4,26 @@ Jenkins shared library for integrating calls the Dynatrace API with your Jenkins
 
 ## Usage
 
-This directive, `@Library('dynatrace@master') _` is added to the top of a Jenkinsfile script to load the Dynatrace library. Then within the various pipeline stages, Dynatrace library functions are called with the required and optional parameters that map to the required by the Dynatrace API requests.  The Dynatrace URL and API token is configured within Jenkins or can be optionally passed as a parameter to the function call. 
+The directive `@Library('dynatrace@master') _` is added to the top of a Jenkinsfile script to load the latest version of the Dynatrace Jenkins library. Then within the various pipeline stages, Dynatrace library functions are called with the required and optional parameters that map to the required by the Dynatrace API requests.  The Dynatrace URL and API token is configured within Jenkins or can be optionally passed as a parameter to the function call. 
+
+Library versions are listed below:  
+
+| Library Version | Comment |
+| --------------- | ------- |
+| 1.0 | Initial Release |
+| 1.1 | Add documentation. Remove deprecated Dynatrace push, jmeter, and keptn functions |
+
+*It is recommended to specify the library version in the Jenkinsfile to ensure pipeline stability. For example `@Library('dynatrace@1.1') _`*
 
 ## Library functions:
 
 **1. Push Information Events** 
-  * Send deployments, configuration changes, and testing activity for monitored services. 
-  * [Information Events](PUSHEVENTS.md) usage details
-  * [Dynatrace API Documentation](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event)
+  * Send deployment, configuration, and testing Dynatrace events. 
+  * [Information Events](PUSHEVENTS.md) usage details.
 
-**2. Synthetic Monitors** 
-  * Create synthetic HTTP monitors to check the availability of your resources—websites or API endpoints.
-  * [Synthetic HTTP monitor](HTTPMONITOR.md) usage details
-  * [Dynatrace HTTP monitor Documentation](https://www.dynatrace.com/support/help/how-to-use-dynatrace/synthetic-monitoring/http-monitors/create-an-http-monitor/)
-  * [Dynatrace API Documentation](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/synthetic/synthetic-monitors/post-a-monitor/)
+**2. Configuration** 
+  * Dynatrace configuration functions that showcase the Dynatrace API.
+  * [Configuration](CONFIGURATION.md) usage details.
 
 # Setup
 
@@ -70,7 +76,12 @@ The Dynatrace URL and API Token can be passed into the function calls, but by de
 
 1. Save settings
 
+# Support
 
+If you’d like help with this pipe, or you have an issue or feature request, let us know. The repo is maintained by Dynatrace. You can contact us directly at ace@dynatrace.com.
 
+If you’re reporting an issue, please include:
 
-
+* the version of the pipe
+* relevant logs and error messages
+* steps to reproduce
