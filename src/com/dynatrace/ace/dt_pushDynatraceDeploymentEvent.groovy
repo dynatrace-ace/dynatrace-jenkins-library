@@ -58,7 +58,7 @@ def call( Map args ) {
   def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
     customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
     httpMode: 'POST',
-    requestBody: toJson(postBody),
+    requestBody: JsonOutput.toJson(postBody),
     responseHandle: 'STRING',
     url: "${dtTenantUrl}/api/v1/events",
     validResponseCodes: "200",
