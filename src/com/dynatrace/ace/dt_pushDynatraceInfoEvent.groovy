@@ -22,8 +22,8 @@ def call( Map args ) {
       echo "source is a mandatory parameter!"
       return 1
   }
-  if(deploymentVersion == "" ) {
-      echo "deploymentVersion is a mandatory parameter!"
+  if(description == "" ) {
+      echo "description is a mandatory parameter!"
       return 1
   }
 
