@@ -26,6 +26,18 @@ def call( Map args ) {
     echo "tagRule is a mandatory parameter!"
     return 1
   }
+  if(deploymentName == "" ) {
+      echo "deploymentName is a mandatory parameter!"
+      return 1
+  }
+  if(source == "" ) {
+      echo "source is a mandatory parameter!"
+      return 1
+  }
+  if(deploymentVersion == "" ) {
+      echo "deploymentVersion is a mandatory parameter!"
+      return 1
+  }
 
   String eventType = "CUSTOM_DEPLOYMENT"
 

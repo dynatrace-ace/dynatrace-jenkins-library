@@ -10,9 +10,10 @@ Below is what Dynatrace events look like.
 
 | Library Function | Description |
 | --- | --- |
-| dt_pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
+| dt_pushDynatraceAnnotationEvent | Used to push a Annotatio Event to Dynatrace |
 | dt_pushDynatraceConfigurationEvent | Used to push a Configuration Changed Event to Dynatrace |
-| dt_pushDynatraceInfoEvent | Used to push a Info  Event to Dynatrace |
+| dt_pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
+| dt_pushDynatraceInfoEvent | Used to push a Information Event to Dynatrace |
 
 # Examples
 

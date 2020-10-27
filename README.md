@@ -18,11 +18,11 @@ Library versions are listed below:
 ## Library functions:
 
 **1. Push Information Events** 
-  * Send deployment, configuration, and testing Dynatrace events. 
+  * Send deployment, configuration, and testing Dynatrace informational events. 
   * [Information Events](PUSHEVENTS.md) usage details.
 
 **2. Configuration** 
-  * Dynatrace configuration functions that showcase the Dynatrace API.
+  * Dynatrace configuration functions that show various examples to perform Dynatrace configurations
   * [Configuration](CONFIGURATION.md) usage details.
 
 # Setup

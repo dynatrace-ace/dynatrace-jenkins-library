@@ -12,7 +12,8 @@ def call( Map args ) {
   String source = args.containsKey("source") ? args.source : "Jenkins"
 
   String description = args.containsKey("description") ? args.description : ""
-  String title = args.containsKey("title") ? args.title : ""
+  String annotationDescription = args.containsKey("annotationDescription") ? args.annotationDescription : ""
+  String annotationType = args.containsKey("annotationType") ? args.annotationType : ""
 
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
@@ -21,12 +22,16 @@ def call( Map args ) {
     echo "tagRule is a mandatory parameter!"
     return 1
   }
+  if(annotationType == "" ) {
+      echo "annotationType is a mandatory parameter!"
+      return 1
+  }
   if(source == "" ) {
       echo "source is a mandatory parameter!"
       return 1
   }
-  if(deploymentVersion == "" ) {
-      echo "deploymentVersion is a mandatory parameter!"
+  if(annotationDescription == "" ) {
+      echo "annotationDescription is a mandatory parameter!"
       return 1
   }
 
@@ -36,9 +41,10 @@ def call( Map args ) {
     eventType: eventType,
     attachRules: [tagRule: tagRule],
     description: description,
-    title: title,
-    customProperties: customProperties,
     source: source,
+    annotationType: annotationType,
+    annotationDescription: annotationDescription,
+    customProperties: customProperties,
     tags: tagRule[0].tags
   ]
 

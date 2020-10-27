@@ -22,6 +22,18 @@ def call(Map args){
         echo "tagRule is a mandatory parameter!"
         return 1
     }
+    if(description == "" ) {
+        echo "description is a mandatory parameter!"
+        return 1
+    }
+    if(source == "" ) {
+        echo "source is a mandatory parameter!"
+        return 1
+    }
+    if(configuration == "" ) {
+        echo "configuration is a mandatory parameter!"
+        return 1
+    }
 
     String eventType = "CUSTOM_CONFIGURATION"
 
