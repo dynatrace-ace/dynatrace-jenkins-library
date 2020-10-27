@@ -20,7 +20,8 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    def status = dt_pushDynatraceDeploymentEvent (
+                    def dynatrace = new com.dynatrace.ace.dt_pushDynatraceDeploymentEvent()
+                    def status = dynatrace.call (
                       tagRule: tagMatchRules,
                       deploymentName: "myDeploymentJob: ${env.JOB_NAME}",
                       deploymentVersion: "myDeploymentVersion",
@@ -36,7 +37,8 @@ pipeline {
         stage("annotation") {
             steps {
                 script {
-                    def status = dt_pushDynatraceAnnotationEvent (
+                    def dynatrace = new com.dynatrace.ace.dt_pushDynatraceAnnotationEvent()
+                    def status = dynatrace.call (
                       tagRule: tagMatchRules,
                       description: "myDescription",
                       annotationType: "myAnnotationType",
@@ -51,7 +53,8 @@ pipeline {
         stage("configure") {
             steps {
                 script {
-                    def status = dt_pushDynatraceConfigurationEvent (
+                    def dynatrace = new com.dynatrace.ace.dt_pushDynatraceConfigurationEvent()
+                    def status = dynatrace.call (
                       tagRule: tagMatchRules,
                       configuration: "myConfiguration",
                       description: "myDescription",
@@ -66,7 +69,8 @@ pipeline {
         stage("info") {
             steps {
                 script {
-                    def status = dt_pushDynatraceInfoEvent (
+                    def dynatrace = new com.dynatrace.ace.dt_pushDynatraceInfoEvent()
+                    def status = dynatrace.call (
                       tagRule: tagMatchRules,
                       title: "myTitle",
                       description: "myDescription",
