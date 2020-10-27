@@ -1,8 +1,4 @@
-/***************************\
-  This function assumes we run on a standard Jenkins Agent.
-
-  Returns either 0(=no errors), 1(=pushing event failed)
-\***************************/
+import groovy.json.JsonOutput
 
 @NonCPS
 def call(Map args){
@@ -50,7 +46,7 @@ def call(Map args){
     def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
       customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
       httpMode: 'POST',
-      requestBody: toJson(postBody),
+      requestBody: JsonOutput.toJson(postBody),
       responseHandle: 'STRING',
       url: "${dtTenantUrl}/api/v1/events",
       validResponseCodes: "200",

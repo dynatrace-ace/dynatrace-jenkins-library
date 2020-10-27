@@ -1,8 +1,5 @@
-/***************************\
-  This function assumes we run on a standard Jenkins Agent.
+import groovy.json.JsonOutput
 
-  Returns either 0(=no errors), 1(=pushing event failed)
-\***************************/
 @NonCPS
 def call( Map args ) {
   // check input arguments
