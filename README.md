@@ -36,6 +36,10 @@ You may have your own, but if not one option is to run Jenkins as [Docker contai
 docker run -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
 ```
 
+The library depends on the [http request plugin](https://plugins.jenkins.io/http_request/). So you must install it from the Jenkins Plugin manager page as shown below.
+
+  ![](./images/plugin.png)
+
 **#2 - Dynatrace tenant and API Token**
 
 If you don't have Dynatrace, then sign up for a [free trial](https://www.dynatrace.comc/trial). To generate a Dynatrace API token, follow these steps:
