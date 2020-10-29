@@ -1,6 +1,8 @@
 // replace 'master' with the library version you are using
 @Library("dynatrace@master") _
 
+def dynatrace = new com.dynatrace.ace.DynatraceEvent()
+
 def tagMatchRules = [[
   "meTypes": [ "SERVICE"],
   tags: [
@@ -20,8 +22,7 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    def dynatrace = new com.dynatrace.ace.dt_pushDynatraceDeploymentEvent()
-                    def status = dynatrace.call (
+                    def status = dynatrace.pushDynatraceDeploymentEvent() (
                       tagRule: tagMatchRules,
                       deploymentName: "myDeploymentJob: ${env.JOB_NAME}",
                       deploymentVersion: "myDeploymentVersion",
@@ -37,8 +38,7 @@ pipeline {
         stage("annotation") {
             steps {
                 script {
-                    def dynatrace = new com.dynatrace.ace.dt_pushDynatraceAnnotationEvent()
-                    def status = dynatrace.call (
+                    def status = dynatrace.pushDynatraceAnnotationEvent (
                       tagRule: tagMatchRules,
                       description: "myDescription",
                       annotationType: "myAnnotationType",
@@ -53,8 +53,7 @@ pipeline {
         stage("configure") {
             steps {
                 script {
-                    def dynatrace = new com.dynatrace.ace.dt_pushDynatraceConfigurationEvent()
-                    def status = dynatrace.call (
+                    def status = dynatrace.pushDynatraceConfigurationEvent (
                       tagRule: tagMatchRules,
                       configuration: "myConfiguration",
                       description: "myDescription",
@@ -69,8 +68,7 @@ pipeline {
         stage("info") {
             steps {
                 script {
-                    def dynatrace = new com.dynatrace.ace.dt_pushDynatraceInfoEvent()
-                    def status = dynatrace.call (
+                    def status = dynatrace.pushDynatraceInfoEvent (
                       tagRule: tagMatchRules,
                       title: "myTitle",
                       description: "myDescription",
