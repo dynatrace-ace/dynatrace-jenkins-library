@@ -4,7 +4,7 @@ Jenkins shared library for integrating calls the Dynatrace API with your Jenkins
 
 ## Usage
 
-The directive `@Library('dynatrace@master') _` is added to the top of a Jenkinsfile script to load the latest version of the Dynatrace Jenkins library. Then within the various pipeline stages, Dynatrace library functions are called with the required and optional parameters that map to the required by the Dynatrace API requests.  The Dynatrace URL and API token is configured within Jenkins or can be optionally passed as a parameter to the function call. 
+The directive `@Library('dynatrace@master')` is added to the top of a Jenkinsfile script to load the latest version of the Dynatrace Jenkins library. Then within the various pipeline stages, Dynatrace library functions are called with the required and optional parameters that map to the required by the Dynatrace API requests.  The Dynatrace URL and API token is configured within Jenkins or can be optionally passed as a parameter to the function call. 
 
 Library versions are listed below:  
 
@@ -13,7 +13,7 @@ Library versions are listed below:
 | 1.0 | Initial Release |
 | 1.1 | Add documentation. Remove deprecated Dynatrace push, jmeter, and keptn functions |
 
-*It is recommended to specify the library version in the Jenkinsfile to ensure pipeline stability. For example `@Library('dynatrace@1.1') _`*
+*It is recommended to specify the library version in the Jenkinsfile to ensure pipeline stability. For example `@Library('dynatrace@1.1')`*
 
 ## Library functions:
 
@@ -24,6 +24,30 @@ Library versions are listed below:
 **2. Configuration** 
   * Dynatrace configuration functions that show various examples to perform Dynatrace configurations
   * [Configuration](CONFIGURATION.md) usage details.
+
+Once you have everything configured use it in your Jenkins Pipeline like this
+
+```groovy
+
+// Import Dynatrace library
+@Library("dynatrace@master")_
+
+// Initialize the class with the event methods
+def event = new com.dynatrace.ace.Event()
+
+// this is called with a script step
+def status = event.pushDynatraceDeploymentEvent() (
+  tagRule: tagMatchRules,
+  deploymentName: "myDeploymentJob: ${env.JOB_NAME}",
+  deploymentVersion: "myDeploymentVersion",
+  deploymentProject: "myDeploymentProject",
+  remediationAction: "myRemediationAction",
+  customProperties : [
+    "Jenkins Build Number": env.BUILD_ID
+  ]
+)
+
+```
 
 # Setup
 
@@ -36,11 +60,19 @@ You may have your own, but if not one option is to run Jenkins as [Docker contai
 docker run -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
 ```
 
-The library depends on the [http request plugin](https://plugins.jenkins.io/http_request/). So you must install it from the Jenkins Plugin manager page as shown below.
+**#2 Pre-Requisits on Jenkins**
+
+This Jenkins Shared Library requires the following Jenkins Plugins to be installed on your Jenkins server.
+
+| Jenkins Plugin | Comment | Tested Version |
+| -------------- | -------- | ------------ |
+| [httpRequest Plugin](https://plugins.jenkins.io/http_request/) | Uses httpRequest to make REST Calls to Keptn | Tested with 1.8.26 | 
+
+Navigate to **Manage Plugins** to install and verify.
 
   ![](./images/plugin.png)
 
-**#2 - Dynatrace tenant and API Token**
+**#3 - Dynatrace tenant and API Token**
 
 If you don't have Dynatrace, then sign up for a [free trial](https://www.dynatrace.comc/trial). To generate a Dynatrace API token, follow these steps:
 

@@ -1,5 +1,9 @@
 // replace 'master' with the library version you are using
-@Library('dynatrace@master') _
+@Library("dynatrace@master")
+def appDetectionRule = new com.dynatrace.ace.AppDetectionRule()
+def dashboard = new com.dynatrace.ace.Dashboard()
+def managementZone = new com.dynatrace.ace.ManagementZone()
+def syntheticTest = new com.dynatrace.ace.SyntheticTest()
 
 def mzConditions = [
     [
@@ -62,7 +66,7 @@ pipeline {
         stage('http-monitor') {
             steps {
                 script {
-                    def status = dt_createUpdateSyntheticTest (
+                    def status = syntheticTest.createUpdateSyntheticTest (
                       testName: 'Dynatrace monitor',
                       url: 'https://www.dynatrace.com',
                       method: 'GET',
@@ -75,7 +79,7 @@ pipeline {
         stage('mz') {
             steps {
                 script {
-                    def (int status, String dt_mngtZoneId) = dt_createUpdateManagementZone (
+                    def (int status, String dt_mngtZoneId) = managementZone.createUpdateManagementZone (
                     managementZoneName : 'SimpleProject Staging',
                     ruleType : 'SERVICE',
                     managementZoneConditions : mzConditions,
@@ -87,7 +91,7 @@ pipeline {
         stage('dashboard') {
             steps {
                 script {
-                    def status = dt_createUpdateDashboard (
+                    def status = dashboard.createUpdateDashboard (
                         dashboardName : 'simpleproject-staging',
                         dashboardManagementZoneName : 'SimpleProject Staging',
                         dashboardManagementZoneId : "${DT_MGMTZONEID}",
@@ -103,7 +107,7 @@ pipeline {
         stage('detection-rule') {
             steps {
                 script {
-                    def status = dt_createUpdateAppDetectionRule (
+                    def status = appDetectionRule.createUpdateAppDetectionRule (
                         dtAppName : "myApp",
                         pattern : "http://myDomain",
                         applicationMatchType: "CONTAINS",

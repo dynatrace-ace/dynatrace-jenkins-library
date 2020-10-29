@@ -1,7 +1,6 @@
 // replace 'master' with the library version you are using
-@Library("dynatrace@master") _
-
-def dynatrace = new com.dynatrace.ace.DynatraceEvent()
+@Library("dynatrace@master")
+def event = new com.dynatrace.ace.Event()
 
 def tagMatchRules = [[
   "meTypes": [ "SERVICE"],
@@ -22,7 +21,7 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    def status = dynatrace.pushDynatraceDeploymentEvent (
+                    def status = event.pushDynatraceDeploymentEvent (
                       tagRule: tagMatchRules,
                       deploymentName: "myDeploymentJob: ${env.JOB_NAME}",
                       deploymentVersion: "myDeploymentVersion",
@@ -38,7 +37,7 @@ pipeline {
         stage("annotation") {
             steps {
                 script {
-                    def status = dynatrace.pushDynatraceAnnotationEvent (
+                    def status = event.pushDynatraceAnnotationEvent (
                       tagRule: tagMatchRules,
                       description: "myDescription",
                       annotationType: "myAnnotationType",
@@ -53,7 +52,7 @@ pipeline {
         stage("configure") {
             steps {
                 script {
-                    def status = dynatrace.pushDynatraceConfigurationEvent (
+                    def status = event.pushDynatraceConfigurationEvent (
                       tagRule: tagMatchRules,
                       configuration: "myConfiguration",
                       description: "myDescription",
@@ -68,7 +67,7 @@ pipeline {
         stage("info") {
             steps {
                 script {
-                    def status = dynatrace.pushDynatraceInfoEvent (
+                    def status = event.pushDynatraceInfoEvent (
                       tagRule: tagMatchRules,
                       title: "myTitle",
                       description: "myDescription",

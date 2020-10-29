@@ -4,12 +4,12 @@ Typically these sorts of configuration updates are best handled via a configurat
 
 # Library functions
 
-| Library Function | Description |
-| --- | --- |
-| dt_createUpdateAppDetectionRule | Used to create or update an existing [Application Detection Rule](https://www.dynatrace.com/support/help/dynatrace-api/configuration-api/rum/application-detection-configuration/) |
-| dt_createUpdateDashboard | Used to create or update an existing [Dashboard](https://www.dynatrace.com/support/help/dynatrace-api/configuration-api/dashboards-api/) |
-| dt_createUpdateManagementZone | Used to create or update an existing [Management Zone](https://www.dynatrace.com/support/help/dynatrace-api/configuration-api/management-zones-api/) |
-| dt_createUpdateSyntheticTest | Used to create or update an existing synthetic [HTTP monitor](https://www.dynatrace.com/support/help/how-to-use-dynatrace/synthetic-monitoring/http-monitors/create-an-http-monitor/) |
+| Class | Library Function | Description |
+| --- | --- | --- |
+| AppDetectionRule | createUpdateAppDetectionRule | Used to create or update an existing [Application Detection Rule](https://www.dynatrace.com/support/help/dynatrace-api/configuration-api/rum/application-detection-configuration/) |
+| Dashboard| createUpdateDashboard | Used to create or update an existing [Dashboard](https://www.dynatrace.com/support/help/dynatrace-api/configuration-api/dashboards-api/) |
+| ManagementZone| createUpdateManagementZone | Used to create or update an existing [Management Zone](https://www.dynatrace.com/support/help/dynatrace-api/configuration-api/management-zones-api/) |
+| SyntheticTest| createUpdateSyntheticTest | Used to create or update an existing synthetic [HTTP monitor](https://www.dynatrace.com/support/help/how-to-use-dynatrace/synthetic-monitoring/http-monitors/create-an-http-monitor/) |
 
 # Examples
 

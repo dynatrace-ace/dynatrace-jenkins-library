@@ -1,3 +1,5 @@
+package com.dynatrace.ace
+
 @Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
  
 import groovyx.net.http.HTTPBuilder
@@ -10,7 +12,7 @@ import static groovyx.net.http.ContentType.*
   Returns either 0(=no errors), 1(=create/update management zone failed)
 \***************************/
 @NonCPS
-def call( Map args ) 
+def createUpdateManagementZone( Map args ) 
     
     /*  String dtTenantUrl, 
         String dtApiToken 
@@ -127,3 +129,5 @@ def call( Map args )
     return [ errorCode, dtManagementZoneId ]
 
 }
+
+return this

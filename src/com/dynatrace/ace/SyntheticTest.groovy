@@ -1,4 +1,6 @@
-@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
+@package com.dynatrace.ace
+
+Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
  
 import groovyx.net.http.HTTPBuilder
 import groovy.json.JsonOutput
@@ -10,7 +12,7 @@ import static groovyx.net.http.ContentType.*
   Returns either 0(=no errors), 1(=create/update syntthetic monitor failed)
 \***************************/
 @NonCPS
-def call( Map args ) 
+def createUpdateSyntheticTest( Map args ) 
     
     /*  String dtTenantUrl, 
         String dtApiToken 
@@ -146,3 +148,5 @@ def call( Map args )
 
     return errorCode
 }
+
+return this

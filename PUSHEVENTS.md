@@ -8,12 +8,12 @@ Below is what Dynatrace events look like.
 
 # Library functions
 
-| Library Function | Description |
-| --- | --- |
-| dt_pushDynatraceAnnotationEvent | Used to push a Annotatio Event to Dynatrace |
-| dt_pushDynatraceConfigurationEvent | Used to push a Configuration Changed Event to Dynatrace |
-| dt_pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
-| dt_pushDynatraceInfoEvent | Used to push a Information Event to Dynatrace |
+| Class | Library Function | Description |
+| --- | --- | --- |
+| Event | pushDynatraceAnnotationEvent | Used to push a Annotation Event to Dynatrace |
+| Event | pushDynatraceConfigurationEvent | Used to push a Configuration Changed Event to Dynatrace |
+| Event | pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
+| Event | pushDynatraceInfoEvent | Used to push a Information Event to Dynatrace |
 
 # Examples
 
