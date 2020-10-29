@@ -1,8 +1,7 @@
 // replace 'master' with the library version you are using
 @Library("dynatrace@master")
 
-import com.dynatrace.ace.DynatraceEvent
-def dynatrace = new com.dynatrace.ace.DynatraceEvent()
+def dynatrace
 
 def tagMatchRules = [[
   "meTypes": [ "SERVICE"],
@@ -20,6 +19,14 @@ pipeline {
     	DT_API_TOKEN = credentials('DT_API_TOKEN')
     }
     stages {
+        stage("load Library") {
+            steps {
+                script {
+                    dynatrace = load("DynatraceEvent.groovy")
+                }
+            }
+        }
+
         stage("deploy") {
             steps {
                 script {
