@@ -30,7 +30,7 @@ Once you have everything configured use it in your Jenkins Pipeline like this
 ```groovy
 
 // Import Dynatrace library
-@Library("dynatrace@master")_
+@Library("dynatrace@master")
 
 // Initialize the class with the event methods
 def event = new com.dynatrace.ace.Event()
@@ -68,7 +68,7 @@ This Jenkins Shared Library requires the following Jenkins Plugins to be install
 | -------------- | -------- | ------------ |
 | [httpRequest Plugin](https://plugins.jenkins.io/http_request/) | Uses httpRequest to make REST Calls to Keptn | Tested with 1.8.26 | 
 
-Navigate to **Manage Plugins** to install and verify.
+To install and verify plugins, navigate to **Manage Plugins**.
 
   ![](./images/plugin.png)
 
