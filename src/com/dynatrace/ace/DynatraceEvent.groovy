@@ -2,7 +2,6 @@ package com.dynatrace.ace
 
 import groovy.json.JsonOutput
 
-@NonCPS
 def pushDynatraceAnnotationEvent( Map args ) {
 
   // check input arguments
@@ -67,7 +66,6 @@ def pushDynatraceAnnotationEvent( Map args ) {
   return true
 }
 
-@NonCPS
 def pushDynatraceConfigurationEvent(Map args){
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
@@ -129,7 +127,6 @@ def pushDynatraceConfigurationEvent(Map args){
     return true
 }
 
-@NonCPS
 def pushDynatraceDeploymentEvent( Map args ) {
   // check input arguments
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
@@ -198,7 +195,6 @@ def pushDynatraceDeploymentEvent( Map args ) {
   return true
 }
 
-@NonCPS
 def pushDynatraceInfoEvent( Map args ) {
 
   // check input arguments
