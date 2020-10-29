@@ -1,6 +1,6 @@
-@package com.dynatrace.ace
+package com.dynatrace.ace
 
-Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
+@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
  
 import groovyx.net.http.HTTPBuilder
 import groovy.json.JsonOutput
