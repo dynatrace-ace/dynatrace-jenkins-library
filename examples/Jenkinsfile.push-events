@@ -1,5 +1,7 @@
 // replace 'master' with the library version you are using
 @Library("dynatrace@master") _
+
+import com.dynatrace.ace.DynatraceEvent
 def dynatrace = com.dynatrace.ace.DynatraceEvent()
 
 def tagMatchRules = [[
