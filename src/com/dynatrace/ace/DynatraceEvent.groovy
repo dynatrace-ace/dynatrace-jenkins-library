@@ -256,3 +256,5 @@ def pushDynatraceInfoEvent( Map args ) {
 
   return true
 }
+
+return this
