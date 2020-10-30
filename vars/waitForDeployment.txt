@@ -1,7 +1,0 @@
-## waitForDeployment
-Used to wait dynamically for a deployment to become available
-
-### *usage:*
-errorCode=executeJMeter('carts', 'dev')
-if(errorCode > 0)
-  error "Deployment failed"

@@ -1,0 +1,83 @@
+// replace 'master' with the library version you are using
+@Library("dynatrace@master")
+def event = new com.dynatrace.ace.Event()
+
+def tagMatchRules = [[
+  "meTypes": [ "SERVICE"],
+  tags: [
+    ["context": "CONTEXTLESS", "key": "project", "value": "demo"],
+    ["context": "CONTEXTLESS", "key": "stage", "value": "dev"],
+    ["context": "CONTEXTLESS", "key": "service", "value": "simple-web-app-1"]
+  ]
+]]
+
+pipeline {
+    agent any
+    environment {
+      DT_TENANT_URL = credentials('DT_TENANT_URL')
+    	DT_API_TOKEN = credentials('DT_API_TOKEN')
+    }
+    stages {
+        stage("deploy") {
+            steps {
+                script {
+                    def status = event.pushDynatraceDeploymentEvent (
+                      tagRule: tagMatchRules,
+                      deploymentName: "myDeploymentJob: ${env.JOB_NAME}",
+                      deploymentVersion: "myDeploymentVersion",
+                      deploymentProject: "myDeploymentProject",
+                      remediationAction: "myRemediationAction",
+                      customProperties : [
+                        "Jenkins Build Number": env.BUILD_ID
+                      ]
+                    )
+                  }
+            }
+        }
+        stage("annotation") {
+            steps {
+                script {
+                    def status = event.pushDynatraceAnnotationEvent (
+                      tagRule: tagMatchRules,
+                      description: "myDescription",
+                      annotationType: "myAnnotationType",
+                      annotationDescription: "myAnnotationDescription",
+                      customProperties : [
+                        "Jenkins Build Number": env.BUILD_ID
+                      ]
+                    )
+                  }
+            }
+        }
+        stage("configure") {
+            steps {
+                script {
+                    def status = event.pushDynatraceConfigurationEvent (
+                      tagRule: tagMatchRules,
+                      configuration: "myConfiguration",
+                      description: "myDescription",
+                      source : "mySource",
+                      customProperties : [
+                        "Jenkins Build Number": env.BUILD_ID
+                      ]
+                    )
+                  }
+            }
+        }
+        stage("info") {
+            steps {
+                script {
+                    def status = event.pushDynatraceInfoEvent (
+                      tagRule: tagMatchRules,
+                      title: "myTitle",
+                      description: "myDescription",
+                      source : "mySource",
+                      customProperties : [
+                        "Jenkins Build Number": env.BUILD_ID
+                      ]
+                    )
+                  }
+            }
+        }
+    }
+}

@@ -1,7 +1,0 @@
-## executeJMeter
-Used to invoke a JMeter script, capture artifacts, pull performance report and perform basic validation on functional & performance thresholds
-
-### *usage:*
-errorCode=executeJMeter('./scripts/carts_load.jmx', 'carts.ourserver.com')
-if(errorCode > 0)
-  error "JMeter Validation Failed!"

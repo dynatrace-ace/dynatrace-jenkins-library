@@ -1,7 +1,0 @@
-## dt_createUpdateDashbopard
-Used to create a dashboard in Dynatrace
-
-### *usage:*
-errorCode=dt_createUpdateDashbopard(dashboardName, dashboardManagementZoneName, dashboardManagementZoneId, dashboardTimeframe, dashboardShared, dashboardLinkShared, dashboardPublished)
-if(errorCode > 0)
-  error "Create or update dashbord in Dynatrace failed"
