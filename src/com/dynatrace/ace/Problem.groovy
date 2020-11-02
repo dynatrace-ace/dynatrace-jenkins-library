@@ -8,7 +8,7 @@ def postProblemComment( Map args ) {
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
 
-  String problemId = args.containsKey("problemId") ? args.comment : ""
+  String problemId = args.containsKey("problemId") ? args.problemId : ""
   String comment = args.containsKey("comment") ? args.comment : ""
   String user = args.containsKey("user") ? args.user : ""
   String context = args.containsKey("context") ? args.context : ""
@@ -43,9 +43,9 @@ def postProblemComment( Map args ) {
     ignoreSslErrors: true
 
     if (postProblemResponse.status == 200) {
-      echo "Problem comment posted successfully!"
+      echo "Problem comment posted successfully to ${problemId}!"
     } else {
-      echo "Failed To post Problem comment:" + postProblemResponse.content
+      echo "Failed To post Problem comment to ${problemId}:" + postProblemResponse.content
       return false
     }
 
