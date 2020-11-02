@@ -21,7 +21,11 @@ Library versions are listed below:
   * Send deployment, configuration, and testing Dynatrace informational events. 
   * [Information Events](PUSHEVENTS.md) usage details.
 
-**2. Configuration** 
+**2. Problems** 
+  * Dyntrace problem related functions
+  * [Problems](PROBLEM.md) usage details.
+
+**3. Configuration** 
   * Dynatrace configuration functions that show various examples to perform Dynatrace configurations
   * [Configuration](CONFIGURATION.md) usage details.
 

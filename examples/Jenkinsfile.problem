@@ -1,0 +1,31 @@
+// replace 'master' with the library version you are using
+@Library("dynatrace@master")
+def problem = new com.dynatrace.ace.Problem()
+
+pipeline {
+    agent any
+    environment {
+      DT_TENANT_URL = credentials('DT_TENANT_URL')
+      DT_API_TOKEN = credentials('DT_API_TOKEN')
+    }
+    parameters {
+        string(name: 'ProblemId', description: 'Problem ID')
+        string(name: 'ProblemComment', description: 'Problem Comment') 
+        string(name: 'ProblemUser', description: 'Problem User', defaultValue: 'JenkinsUser') 
+        string(name: 'ProblemContext', description: 'Problem Content', defaultValue: 'Jenkins') 
+    }
+    stages {
+        stage("post comment") {
+            steps {
+                script {
+                    def status = problem.postProblemComment (
+                      problemId: "${params.ProblemId}",
+                      comment: "${params.ProblemComment}",
+                      user: "${params.ProblemUser}",
+                      context: "${params.ProblemContext}"
+                    )
+                  }
+            }
+        }
+    }
+}
