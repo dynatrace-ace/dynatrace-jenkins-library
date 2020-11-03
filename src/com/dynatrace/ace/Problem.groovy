@@ -74,7 +74,6 @@ def postProblemComment( Map args ) {
     requestBody: JsonOutput.toJson(postBody),
     responseHandle: 'STRING',
     url: "${dtTenantUrl}/api/v2/problems/${problemId}/comments",
-    validResponseCodes: "200",
     ignoreSslErrors: true
 
     if (postProblemResponse.status == 200) {
