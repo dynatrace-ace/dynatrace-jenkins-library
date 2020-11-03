@@ -77,7 +77,7 @@ def postProblemComment( Map args ) {
     url: "${dtTenantUrl}/api/v2/problems/${problemId}/comments",
     ignoreSslErrors: true
 
-    if (postProblemResponse.status == 200) {
+    if (postProblemResponse.status == 201) {
       echo "Problem comment posted successfully to ${problemId}!"
     } else {
       echo "Failed To post Problem comment to ${problemId}:" + postProblemResponse.content
