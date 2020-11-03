@@ -11,6 +11,10 @@ Typically these sorts of configuration updates are best handled via a configurat
 | ManagementZone| createUpdateManagementZone | Used to create or update an existing [Management Zone](https://www.dynatrace.com/support/help/dynatrace-api/configuration-api/management-zones-api/) |
 | SyntheticTest| createUpdateSyntheticTest | Used to create or update an existing synthetic [HTTP monitor](https://www.dynatrace.com/support/help/how-to-use-dynatrace/synthetic-monitoring/http-monitors/create-an-http-monitor/) |
 
+# Authentication
+
+To execute these functions, review the API Token permission requirements in the Dynatrace documentation.
+
 # Examples
 
 See example Jenkinsfiles in the [examples folder](examples)

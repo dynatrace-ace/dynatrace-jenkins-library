@@ -15,6 +15,10 @@ Below is what Dynatrace events look like.
 | Event | pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
 | Event | pushDynatraceInfoEvent | Used to push a Information Event to Dynatrace |
 
+# Authentication
+
+To execute these functions, your API Token needs have **Access problem and event feed, metrics, and topology (DataExport)** permission.
+
 # Examples
 
 See example Jenkinsfiles in the [examples folder](examples)

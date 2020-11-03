@@ -8,3 +8,7 @@ Provided as examples to calling the Dynatrace API.
 | --- | --- | --- |
 | Problem | postProblemComment | Add a [Problem Comment](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/problems/comments/post-comment/) for an existing Dynatrace Problem ID |
 | Problem | closeProblem | [Close a Problem](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/problems/problems/post-close/) for an existing Dynatrace Problem ID.  Optionally provide a comment |
+
+# Authentication
+
+To execute these functions, your API Token needs have **Access problem and event feed, metrics, and topology (DataExport)** permission.
