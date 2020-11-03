@@ -19,19 +19,19 @@ def pushDynatraceAnnotationEvent( Map args ) {
   // check minimum required params
   if(tagRule == "" ) {
     echo "tagRule is a mandatory parameter!"
-    return 1
+    return false
   }
   if(annotationType == "" ) {
       echo "annotationType is a mandatory parameter!"
-      return 1
+      return false
   }
   if(source == "" ) {
       echo "source is a mandatory parameter!"
-      return 1
+      return false
   }
   if(annotationDescription == "" ) {
       echo "annotationDescription is a mandatory parameter!"
-      return 1
+      return false
   }
 
   String eventType = "CUSTOM_ANNOTATION"
@@ -53,7 +53,7 @@ def pushDynatraceAnnotationEvent( Map args ) {
     requestBody: JsonOutput.toJson(postBody),
     responseHandle: 'STRING',
     url: "${dtTenantUrl}/api/v1/events",
-    validResponseCodes: "200",
+    validResponseCodes: "200:403",
     ignoreSslErrors: true
 
     if (createEventResponse.status == 200) {
@@ -81,19 +81,19 @@ def pushDynatraceConfigurationEvent(Map args){
     // check minimum required params
     if(tagRule == "" ) {
         echo "tagRule is a mandatory parameter!"
-        return 1
+        return false
     }
     if(description == "" ) {
         echo "description is a mandatory parameter!"
-        return 1
+        return false
     }
     if(source == "" ) {
         echo "source is a mandatory parameter!"
-        return 1
+        return false
     }
     if(configuration == "" ) {
         echo "configuration is a mandatory parameter!"
-        return 1
+        return false
     }
 
     String eventType = "CUSTOM_CONFIGURATION"
@@ -114,7 +114,7 @@ def pushDynatraceConfigurationEvent(Map args){
       requestBody: JsonOutput.toJson(postBody),
       responseHandle: 'STRING',
       url: "${dtTenantUrl}/api/v1/events",
-      validResponseCodes: "200",
+      validResponseCodes: "200:403",
       ignoreSslErrors: true
 
       if (createEventResponse.status == 200) {
@@ -147,19 +147,19 @@ def pushDynatraceDeploymentEvent( Map args ) {
   // check minimum required params
   if(tagRule == "" ) {
     echo "tagRule is a mandatory parameter!"
-    return 1
+    return false
   }
   if(deploymentName == "" ) {
       echo "deploymentName is a mandatory parameter!"
-      return 1
+      return false
   }
   if(source == "" ) {
       echo "source is a mandatory parameter!"
-      return 1
+      return false
   }
   if(deploymentVersion == "" ) {
       echo "deploymentVersion is a mandatory parameter!"
-      return 1
+      return false
   }
 
   String eventType = "CUSTOM_DEPLOYMENT"
@@ -182,7 +182,7 @@ def pushDynatraceDeploymentEvent( Map args ) {
     requestBody: JsonOutput.toJson(postBody),
     responseHandle: 'STRING',
     url: "${dtTenantUrl}/api/v1/events",
-    validResponseCodes: "200",
+    validResponseCodes: "200:403",
     ignoreSslErrors: true
 
     if (createEventResponse.status == 200) {
@@ -211,15 +211,15 @@ def pushDynatraceInfoEvent( Map args ) {
   // check minimum required params
   if(tagRule == "" ) {
     echo "tagRule is a mandatory parameter!"
-    return 1
+    return false
   }
   if(source == "" ) {
       echo "source is a mandatory parameter!"
-      return 1
+      return false
   }
   if(description == "" ) {
       echo "description is a mandatory parameter!"
-      return 1
+      return false
   }
 
   String eventType = "CUSTOM_INFO"
@@ -240,7 +240,7 @@ def pushDynatraceInfoEvent( Map args ) {
     requestBody: JsonOutput.toJson(postBody),
     responseHandle: 'STRING',
     url: "${dtTenantUrl}/api/v1/events",
-    validResponseCodes: "200",
+    validResponseCodes: "200:403",
     ignoreSslErrors: true
 
     if (createEventResponse.status == 200) {

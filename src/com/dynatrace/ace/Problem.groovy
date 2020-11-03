@@ -56,11 +56,11 @@ def postProblemComment( Map args ) {
   // check minimum required params
   if(problemId == "" ) {
     echo "problemId is a mandatory parameter!"
-    return 1
+    return false
   }
   if(message == "" ) {
       echo "message is a mandatory parameter!"
-      return 1
+      return false
   }
 
   def postBody = [
@@ -81,7 +81,7 @@ def postProblemComment( Map args ) {
       echo "Problem comment posted successfully to ${problemId}!"
     } else {
       echo "Failed To post Problem comment to ${problemId}:" + postProblemResponse.content
-      return 1
+      return false
     }
 
   return true
