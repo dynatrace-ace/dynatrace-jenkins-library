@@ -73,6 +73,7 @@ def postProblemComment( Map args ) {
     httpMode: 'POST',
     requestBody: JsonOutput.toJson(postBody),
     responseHandle: 'STRING',
+    validResponseCodes: "200:403",
     url: "${dtTenantUrl}/api/v2/problems/${problemId}/comments",
     ignoreSslErrors: true
 
