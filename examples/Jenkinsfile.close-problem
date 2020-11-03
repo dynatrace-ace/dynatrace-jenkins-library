@@ -20,7 +20,7 @@ pipeline {
                       problemId: "${params.ProblemId}",
                       message: "${params.ProblemMessage}",
                     )
-                    if(status != 0){
+                    if(!status){
                       error('Aborting the build.')
                     }
                   }
