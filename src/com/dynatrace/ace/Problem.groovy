@@ -80,7 +80,7 @@ def postProblemComment( Map args ) {
       echo "Problem comment posted successfully to ${problemId}!"
     } else {
       echo "Failed To post Problem comment to ${problemId}:" + postProblemResponse.content
-      return false
+      return 1
     }
 
   return true
