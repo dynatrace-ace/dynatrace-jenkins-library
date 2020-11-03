@@ -31,6 +31,9 @@ pipeline {
                         "Jenkins Build Number": env.BUILD_ID
                       ]
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                   }
             }
         }
@@ -46,6 +49,9 @@ pipeline {
                         "Jenkins Build Number": env.BUILD_ID
                       ]
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                   }
             }
         }
@@ -61,6 +67,9 @@ pipeline {
                         "Jenkins Build Number": env.BUILD_ID
                       ]
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                   }
             }
         }
@@ -76,6 +85,9 @@ pipeline {
                         "Jenkins Build Number": env.BUILD_ID
                       ]
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                   }
             }
         }

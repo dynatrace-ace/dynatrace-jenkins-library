@@ -73,6 +73,9 @@ pipeline {
                       frequency: '1',
                       location: 'GEOLOCATION-4DBE735F24F26BD5'
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                   }
             }
         }
@@ -84,6 +87,9 @@ pipeline {
                     ruleType : 'SERVICE',
                     managementZoneConditions : mzConditions,
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                     DT_MGMTZONEID = dt_mngtZoneId
                   }
             }
@@ -101,6 +107,9 @@ pipeline {
                         dashboardTimeframe : '-30m',
                         dtDashboardTiles : dashboardTileRules
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                   }
             }
         }
@@ -113,6 +122,9 @@ pipeline {
                         applicationMatchType: "CONTAINS",
                         applicationMatchTarget: "URL"
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                   }
             }
         }

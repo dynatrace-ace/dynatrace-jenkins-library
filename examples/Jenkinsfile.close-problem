@@ -20,6 +20,9 @@ pipeline {
                       problemId: "${params.ProblemId}",
                       message: "${params.ProblemMessage}",
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                   }
             }
         }
