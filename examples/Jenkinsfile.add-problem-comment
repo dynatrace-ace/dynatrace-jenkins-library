@@ -10,16 +10,16 @@ pipeline {
     }
     parameters {
         string(name: 'ProblemId', description: 'Problem ID')
-        string(name: 'ProblemComment', description: 'Problem Comment') 
-        string(name: 'ProblemContext', description: 'Problem Content', defaultValue: 'Jenkins') 
+        string(name: 'ProblemMessage', description: 'Problem Message') 
+        string(name: 'ProblemContext', description: 'Problem Context', defaultValue: 'Jenkins') 
     }
     stages {
-        stage("post problem comment") {
+        stage("post problem message") {
             steps {
                 script {
                     def status = problem.postProblemComment (
                       problemId: "${params.ProblemId}",
-                      comment: "${params.ProblemComment}",
+                      message: "${params.ProblemMessage}",
                       context: "${params.ProblemContext}"
                     )
                   }

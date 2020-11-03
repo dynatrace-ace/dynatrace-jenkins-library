@@ -50,7 +50,7 @@ def postProblemComment( Map args ) {
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
 
   String problemId = args.containsKey("problemId") ? args.problemId : ""
-  String comment = args.containsKey("comment") ? args.comment : ""
+  String message = args.containsKey("message") ? args.message : ""
   String context = args.containsKey("context") ? args.context : ""
 
   // check minimum required params
@@ -58,13 +58,13 @@ def postProblemComment( Map args ) {
     echo "problemId is a mandatory parameter!"
     return 1
   }
-  if(comment == "" ) {
-      echo "comment is a mandatory parameter!"
+  if(message == "" ) {
+      echo "message is a mandatory parameter!"
       return 1
   }
 
   def postBody = [
-    comment: comment,
+    message: message,
     context: context
   ]
 
