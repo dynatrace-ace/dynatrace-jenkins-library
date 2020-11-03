@@ -6,4 +6,5 @@ Provided as examples to calling the Dynatrace API.
 
 | Class | Library Function | Description |
 | --- | --- | --- |
-| Problem | postProblemComment | Post [Problem Comment](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/problems/comments/post-comment/) for an existing Dynatrace Problem ID |
+| Problem | postProblemComment | Add a [Problem Comment](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/problems/comments/post-comment/) for an existing Dynatrace Problem ID |
+| Problem | closeProblem | [Close a Problem](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/problems/problems/post-close/) for an existing Dynatrace Problem ID.  Optionally provide a comment |

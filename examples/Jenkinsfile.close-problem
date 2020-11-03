@@ -10,19 +10,15 @@ pipeline {
     }
     parameters {
         string(name: 'ProblemId', description: 'Problem ID')
-        string(name: 'ProblemComment', description: 'Problem Comment') 
-        string(name: 'ProblemUser', description: 'Problem User', defaultValue: 'JenkinsUser') 
-        string(name: 'ProblemContext', description: 'Problem Content', defaultValue: 'Jenkins') 
+        string(name: 'ProblemMessage', description: 'Problem Close Message') 
     }
     stages {
-        stage("post comment") {
+        stage("close problem") {
             steps {
                 script {
-                    def status = problem.postProblemComment (
+                    def status = problem.problemClose (
                       problemId: "${params.ProblemId}",
-                      comment: "${params.ProblemComment}",
-                      user: "${params.ProblemUser}",
-                      context: "${params.ProblemContext}"
+                      message: "${params.ProblemMessage}",
                     )
                   }
             }
