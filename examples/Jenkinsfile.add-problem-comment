@@ -22,6 +22,9 @@ pipeline {
                       message: "${params.ProblemMessage}",
                       context: "${params.ProblemContext}"
                     )
+                    if(status != 0){
+                      error('Aborting the build.')
+                    }
                   }
             }
         }
