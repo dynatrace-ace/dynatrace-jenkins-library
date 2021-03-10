@@ -173,7 +173,8 @@ def pushDynatraceDeploymentEvent( Map args ) {
     ciBackLink: ciBackLink,
     remediationAction: remediationAction,
     tags: tagRule[0].tags,
-    source: source
+    source: source,
+    customProperties: customProperties
   ]
 
   def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
