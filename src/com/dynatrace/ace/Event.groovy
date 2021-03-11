@@ -5,13 +5,13 @@ import groovy.json.JsonOutput
 boolean pushDynatraceEvent( Map args ) {
   switch(args.eventType) {
   case "CUSTOM_ANNOTATION":
-    pushDynatraceAnnotationEvent(args)
+    return pushDynatraceAnnotationEvent(args)
   case "CUSTOM_CONFIGURATION":
-    pushDynatraceConfigurationEvent(args)
+    return pushDynatraceConfigurationEvent(args)
   case "CUSTOM_DEPLOYMENT":
-    pushDynatraceDeploymentEvent(args)
+    return pushDynatraceDeploymentEvent(args)
   case "CUSTOM_INFO":
-    pushDynatraceInfoEvent(args)
+    return pushDynatraceInfoEvent(args)
   default:
     echo "Invalid eventType: " + args.eventType
     return false
@@ -21,6 +21,7 @@ boolean pushDynatraceEvent( Map args ) {
 private boolean pushDynatraceAnnotationEvent( Map args ) {
 
   // check input arguments
+  String eventType = args.eventType
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
@@ -49,8 +50,6 @@ private boolean pushDynatraceAnnotationEvent( Map args ) {
       echo "annotationDescription is a mandatory parameter!"
       return 1
   }
-
-  String eventType = "CUSTOM_ANNOTATION"
 
   def postBody = [
     eventType: eventType,
@@ -84,6 +83,7 @@ private boolean pushDynatraceAnnotationEvent( Map args ) {
 
 private boolean pushDynatraceConfigurationEvent(Map args){
     // check input arguments
+    String eventType = args.eventType
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
     String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
     def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
@@ -111,8 +111,6 @@ private boolean pushDynatraceConfigurationEvent(Map args){
         echo "configuration is a mandatory parameter!"
         return 1
     }
-
-    String eventType = "CUSTOM_CONFIGURATION"
 
     def postBody = [
       eventType: eventType,
@@ -145,6 +143,7 @@ private boolean pushDynatraceConfigurationEvent(Map args){
 
 private boolean pushDynatraceDeploymentEvent( Map args ) {
   // check input arguments
+  String eventType = args.eventType
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
@@ -177,8 +176,6 @@ private boolean pushDynatraceDeploymentEvent( Map args ) {
       echo "deploymentVersion is a mandatory parameter!"
       return 1
   }
-
-  String eventType = "CUSTOM_DEPLOYMENT"
 
   def postBody = [
     eventType: eventType,
@@ -215,6 +212,7 @@ private boolean pushDynatraceDeploymentEvent( Map args ) {
 private boolean pushDynatraceInfoEvent( Map args ) {
 
   // check input arguments
+  String eventType = args.eventType
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
@@ -238,8 +236,6 @@ private boolean pushDynatraceInfoEvent( Map args ) {
       echo "description is a mandatory parameter!"
       return 1
   }
-
-  String eventType = "CUSTOM_INFO"
 
   def postBody = [
     eventType: eventType,
