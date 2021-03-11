@@ -31,11 +31,13 @@ def closeProblem( Map args ) {
     requestBody: JsonOutput.toJson(postBody),
     responseHandle: 'STRING',
     url: "${dtTenantUrl}/api/v2/problems/${problemId}/close",
-    validResponseCodes: "200",
+    validResponseCodes: "200:204",
     ignoreSslErrors: true
 
     if (postProblemResponse.status == 200) {
       echo "Problem ${problemId} Successfully Closed!"
+    } else if (postProblemResponse.status == 204) {
+      echo "Problem ${problemId} is closed already the request hasn't been executed."
     } else {
       echo "Failed To Close Problem ${problemId}:" + postProblemResponse.content
       return false
