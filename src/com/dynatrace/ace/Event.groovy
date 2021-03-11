@@ -182,7 +182,7 @@ def pushDynatraceDeploymentEvent( Map args ) {
     requestBody: JsonOutput.toJson(postBody),
     responseHandle: 'STRING',
     url: "${dtTenantUrl}/api/v1/events",
-    validResponseCodes: "200",
+    validResponseCodes: "200:403",
     ignoreSslErrors: true
 
     if (createEventResponse.status == 200) {
