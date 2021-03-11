@@ -2,7 +2,23 @@ package com.dynatrace.ace
 
 import groovy.json.JsonOutput
 
-def pushDynatraceAnnotationEvent( Map args ) {
+boolean pushDynatraceEvent( Map args ) {
+  switch(args.eventType) {
+  case "CUSTOM_ANNOTATION":
+    pushDynatraceAnnotationEvent(args)
+  case "CUSTOM_CONFIGURATION":
+    pushDynatraceConfigurationEvent(args)
+  case "CUSTOM_DEPLOYMENT":
+    pushDynatraceDeploymentEvent(args)
+  case "CUSTOM_INFO":
+    pushDynatraceInfoEvent(args)
+  default:
+    echo "Invalid eventType: " + args.eventType
+    return false
+  }
+}
+
+private boolean pushDynatraceAnnotationEvent( Map args ) {
 
   // check input arguments
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
@@ -66,7 +82,7 @@ def pushDynatraceAnnotationEvent( Map args ) {
   return true
 }
 
-def pushDynatraceConfigurationEvent(Map args){
+private boolean pushDynatraceConfigurationEvent(Map args){
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
     String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
@@ -127,7 +143,7 @@ def pushDynatraceConfigurationEvent(Map args){
     return true
 }
 
-def pushDynatraceDeploymentEvent( Map args ) {
+private boolean pushDynatraceDeploymentEvent( Map args ) {
   // check input arguments
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
@@ -172,6 +188,7 @@ def pushDynatraceDeploymentEvent( Map args ) {
     deploymentProject: deploymentProject,
     ciBackLink: ciBackLink,
     remediationAction: remediationAction,
+    customProperties: customProperties,
     tags: tagRule[0].tags,
     source: source
   ]
@@ -195,7 +212,7 @@ def pushDynatraceDeploymentEvent( Map args ) {
   return true
 }
 
-def pushDynatraceInfoEvent( Map args ) {
+private boolean pushDynatraceInfoEvent( Map args ) {
 
   // check input arguments
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
