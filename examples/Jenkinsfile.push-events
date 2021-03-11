@@ -18,62 +18,70 @@ pipeline {
     	DT_API_TOKEN = credentials('DT_API_TOKEN')
     }
     stages {
-        stage("deploy") {
+        stage("CUSTOM_DEPLOYMENT") {
             steps {
                 script {
-                    def status = event.pushDynatraceDeploymentEvent (
+                    def status = event.pushDynatraceEvent (
+                      eventType: "CUSTOM_DEPLOYMENT",
                       tagRule: tagMatchRules,
                       deploymentName: "myDeploymentJob: ${env.JOB_NAME}",
                       deploymentVersion: "myDeploymentVersion",
                       deploymentProject: "myDeploymentProject",
                       remediationAction: "myRemediationAction",
                       customProperties : [
-                        "Jenkins Build Number": env.BUILD_ID
+                          "Jenkins JOB_NAME": "${env.JOB_NAME}",
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                       ]
                     )
                   }
             }
         }
-        stage("annotation") {
+        stage("CUSTOM_ANNOTATION") {
             steps {
                 script {
-                    def status = event.pushDynatraceAnnotationEvent (
+                    def status = event.pushDynatraceEvent (
+                      eventType: "CUSTOM_ANNOTATION",
                       tagRule: tagMatchRules,
                       description: "myDescription",
                       annotationType: "myAnnotationType",
                       annotationDescription: "myAnnotationDescription",
                       customProperties : [
-                        "Jenkins Build Number": env.BUILD_ID
+                          "Jenkins JOB_NAME": "${env.JOB_NAME}",
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                       ]
                     )
                   }
             }
         }
-        stage("configure") {
+        stage("CUSTOM_CONFIGURATION") {
             steps {
                 script {
-                    def status = event.pushDynatraceConfigurationEvent (
+                    def status = event.pushDynatraceEvent (
+                      eventType: "CUSTOM_CONFIGURATION",
                       tagRule: tagMatchRules,
                       configuration: "myConfiguration",
                       description: "myDescription",
                       source : "mySource",
                       customProperties : [
-                        "Jenkins Build Number": env.BUILD_ID
+                          "Jenkins JOB_NAME": "${env.JOB_NAME}",
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                       ]
                     )
                   }
             }
         }
-        stage("info") {
+        stage("CUSTOM_INFO") {
             steps {
                 script {
-                    def status = event.pushDynatraceInfoEvent (
+                    def status = event.pushDynatraceEvent (
+                      eventType: "CUSTOM_INFO",
                       tagRule: tagMatchRules,
-                      title: "myTitle",
-                      description: "myDescription",
+                      title: "myInfoTitle",
+                      description: "myInfoDescription",
                       source : "mySource",
                       customProperties : [
-                        "Jenkins Build Number": env.BUILD_ID
+                          "Jenkins JOB_NAME": "${env.JOB_NAME}",
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                       ]
                     )
                   }

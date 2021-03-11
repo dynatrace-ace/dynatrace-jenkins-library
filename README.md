@@ -19,11 +19,15 @@ Library versions are listed below:
 
 **1. Push Information Events** 
   * Send deployment, configuration, and testing Dynatrace informational events. 
-  * [Information Events](PUSHEVENTS.md) usage details.
+  * [Information Events](PUSHEVENTS.md) for usage details.
 
-**2. Configuration** 
-  * Dynatrace configuration functions that show various examples to perform Dynatrace configurations
-  * [Configuration](CONFIGURATION.md) usage details.
+**2. Problems** 
+  * Add problem comment and close a problem. 
+  * [Information Events](PROBLEM.md) for usage details.
+
+**3. Configuration** 
+  * Dynatrace configuration functions that show various examples to perform Dynatrace configurations, but we encourage you to look at [Dynatrace monitoring as Code](https://github.com/dynatrace-oss/dynatrace-monitoring-as-code) as the recommended approach.
+  * [Configuration](CONFIGURATION.md) for usage details.
 
 Once you have everything configured use it in your Jenkins Pipeline like this
 
