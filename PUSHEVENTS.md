@@ -10,10 +10,7 @@ Below is what Dynatrace events look like.
 
 | Class | Library Function | Description |
 | --- | --- | --- |
-| Event | pushDynatraceAnnotationEvent | Used to push a Annotation Event to Dynatrace |
-| Event | pushDynatraceConfigurationEvent | Used to push a Configuration Changed Event to Dynatrace |
-| Event | pushDynatraceDeploymentEvent | Used to push a Deployment Event to Dynatrace |
-| Event | pushDynatraceInfoEvent | Used to push a Information Event to Dynatrace |
+| Event | pushDynatraceEvent | Used to push an Event to Dynatrace |
 
 # Examples
 
@@ -44,7 +41,7 @@ In addition to the to required fields, additonal properties can be added too, fo
 
 ```
 customProperties : [
-    "Jenkins Build Number": env.BUILD_ID,
-    "GIT COMMIT": env.GIT_COMMIT
-  ]
+    "Jenkins JOB_NAME": "${env.JOB_NAME}",
+    "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+]
 ```
