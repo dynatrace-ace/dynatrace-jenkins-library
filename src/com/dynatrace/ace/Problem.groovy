@@ -2,6 +2,7 @@ package com.dynatrace.ace
 
 import groovy.json.JsonOutput
 
+
 def closeProblem( Map args ) {
 
   // check input arguments
