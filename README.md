@@ -11,7 +11,7 @@ Library versions are listed below:
 | Library Version | Comment |
 | --------------- | ------- |
 | 1.0 | Initial Release |
-| 1.1 | Add documentation. Remove deprecated Dynatrace push, jmeter, and keptn functions |
+| 1.1 | Converted scripts into classes. Added problem functions. Added and updated README files. Added example jenkinfiles. Remove deprecated Dynatrace push, jmeter, and keptn functions |
 
 *It is recommended to specify the library version in the Jenkinsfile to ensure pipeline stability. For example `@Library('dynatrace@1.1')`*
 
