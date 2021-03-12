@@ -143,7 +143,7 @@ private boolean pushDynatraceConfigurationEvent(Map args){
 
 private boolean pushDynatraceDeploymentEvent( Map args ) {
   // check input arguments
-  String eventType = args.eventType
+  String eventType = args.containsKey("eventType") ? args.eventType : "${CUSTOM_DEPLOYMENT}"
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
