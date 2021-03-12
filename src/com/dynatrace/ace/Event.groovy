@@ -98,6 +98,8 @@ def pushDynatraceAnnotationEvent( Map args ) {
 
 def pushDynatraceConfigurationEvent(Map args){
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_CONFIGURATION"
   String description = args.containsKey("description") ? args.description : ""
   String source = args.containsKey("source") ? args.source : "Jenkins"
