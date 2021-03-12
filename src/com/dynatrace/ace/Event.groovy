@@ -4,7 +4,7 @@ import groovy.json.JsonOutput
 
 // reference: https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event/ 
 // public method that the Jenkinsfile script should call
-boolean pushDynatraceEvent( Map args ) {
+def pushDynatraceEvent( Map args ) {
   switch(args.eventType) {
   case "CUSTOM_ANNOTATION":
     return pushDynatraceAnnotationEvent(args)
@@ -31,7 +31,7 @@ boolean pushDynatraceEvent( Map args ) {
 }
 
 // shared function that make the API call to Dynatrace. 
-boolean sendDynatraceEvent( String dtTenantUrl, String dtApiToken, Map postBody ) {
+def sendDynatraceEvent( String dtTenantUrl, String dtApiToken, Map postBody ) {
 
   def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
     customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
@@ -51,7 +51,7 @@ boolean sendDynatraceEvent( String dtTenantUrl, String dtApiToken, Map postBody 
   }
 }
 
-boolean pushDynatraceAnnotationEvent( Map args ) {
+def pushDynatraceAnnotationEvent( Map args ) {
   // check input arguments
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
@@ -98,7 +98,7 @@ boolean pushDynatraceAnnotationEvent( Map args ) {
   return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
-boolean pushDynatraceConfigurationEvent(Map args){
+def pushDynatraceConfigurationEvent(Map args){
   // check input arguments
   String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_CONFIGURATION"
   String description = args.containsKey("description") ? args.description : ""
@@ -139,7 +139,7 @@ boolean pushDynatraceConfigurationEvent(Map args){
   return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
-boolean pushDynatraceDeploymentEvent( Map args ) {
+def pushDynatraceDeploymentEvent( Map args ) {
   // check input arguments
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
@@ -189,7 +189,7 @@ boolean pushDynatraceDeploymentEvent( Map args ) {
 
 }
 
-boolean pushDynatraceInfoEvent( Map args ) {
+def pushDynatraceInfoEvent( Map args ) {
 
   // check input arguments
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
