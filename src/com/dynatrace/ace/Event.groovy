@@ -22,7 +22,7 @@ boolean pushDynatraceEvent( Map args ) {
     return pushDynatracePerformanceEvent(args)
   case "RESOURCE_CONTENTION":
     return pushDynatraceResourceContentionEvent(args)
-  case "ERROR_EVENT"
+  case "ERROR_EVENT":
     return pushDynatraceErrorEvent(args)
   default:
     echo "Invalid eventType: " + args.eventType
