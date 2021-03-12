@@ -2,6 +2,8 @@ package com.dynatrace.ace
 
 import groovy.json.JsonOutput
 
+// reference: https://www.dynatrace.com/support/help/dynatrace-api/environment-api/events/post-event/ 
+// public method that the Jenkinsfile script should call
 boolean pushDynatraceEvent( Map args ) {
   switch(args.eventType) {
   case "CUSTOM_ANNOTATION":
@@ -12,25 +14,56 @@ boolean pushDynatraceEvent( Map args ) {
     return pushDynatraceDeploymentEvent(args)
   case "CUSTOM_INFO":
     return pushDynatraceInfoEvent(args)
+  case "MARKED_FOR_TERMINATION":
+    return pushDynatraceMarkedForTerminationEvent(args)
+  case "AVAILABILITY_EVENT":
+    return pushDynatraceAvailabilityEvent(args)
+  case "PERFORMANCE_EVENT":
+    return pushDynatracePerformanceEvent(args)
+  case "RESOURCE_CONTENTION":
+    return pushDynatraceResourceContentionEvent(args)
+  case "ERROR_EVENT"
+    return pushDynatraceErrorEvent(args)
   default:
     echo "Invalid eventType: " + args.eventType
     return false
   }
 }
 
-private boolean pushDynatraceAnnotationEvent( Map args ) {
+// shared private function that make the API call to Dynatrace. 
+private boolean sendDynatraceEvent( Map postBody ) {
 
-  // check input arguments
-  String eventType = args.eventType
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
-  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
-  String source = args.containsKey("source") ? args.source : "Jenkins"
 
+  def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
+    customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
+    httpMode: 'POST',
+    requestBody: JsonOutput.toJson(postBody),
+    responseHandle: 'STRING',
+    url: "${dtTenantUrl}/api/v1/events",
+    validResponseCodes: "200:403",
+    ignoreSslErrors: true
+
+  if (createEventResponse.status == 200) {
+    echo "Dynatrace event posted successfully!"
+    return true
+  } else {
+    echo "Failed To post Dynatrace event:" + createEventResponse.content
+    return false
+  }
+}
+
+private boolean pushDynatraceAnnotationEvent( Map args ) {
+  // check input arguments
+  String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_ANNOTATION"
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
+  String source = args.containsKey("source") ? args.source : "Jenkins"
   String description = args.containsKey("description") ? args.description : ""
   String annotationDescription = args.containsKey("annotationDescription") ? args.annotationDescription : ""
   String annotationType = args.containsKey("annotationType") ? args.annotationType : ""
-
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
   // check minimum required params
@@ -39,16 +72,16 @@ private boolean pushDynatraceAnnotationEvent( Map args ) {
     return 1
   }
   if(annotationType == "" ) {
-      echo "annotationType is a mandatory parameter!"
-      return 1
+    echo "annotationType is a mandatory parameter!"
+    return 1
   }
   if(source == "" ) {
-      echo "source is a mandatory parameter!"
-      return 1
+    echo "source is a mandatory parameter!"
+    return 1
   }
   if(annotationDescription == "" ) {
-      echo "annotationDescription is a mandatory parameter!"
-      return 1
+    echo "annotationDescription is a mandatory parameter!"
+    return 1
   }
 
   def postBody = [
@@ -62,101 +95,61 @@ private boolean pushDynatraceAnnotationEvent( Map args ) {
     tags: tagRule[0].tags
   ]
 
-  def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
-    customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
-    httpMode: 'POST',
-    requestBody: JsonOutput.toJson(postBody),
-    responseHandle: 'STRING',
-    url: "${dtTenantUrl}/api/v1/events",
-    validResponseCodes: "200:403",
-    ignoreSslErrors: true
-
-    if (createEventResponse.status == 200) {
-      echo "Custom info event posted successfully!"
-    } else {
-      echo "Failed To post event:" + createEventResponse.content
-      return false
-    }
-
-  return true
+  println "Posting Annotation event..."
+  return sendDynatraceEvent(postBody)
 }
 
 private boolean pushDynatraceConfigurationEvent(Map args){
-    // check input arguments
-    String eventType = args.eventType
-    String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
-    String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
-    def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  // check input arguments
+  String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_CONFIGURATION"
+  String description = args.containsKey("description") ? args.description : ""
+  String source = args.containsKey("source") ? args.source : "Jenkins"
+  String configuration = args.containsKey("configuration") ? args.configuration : ""
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
-    String description = args.containsKey("description") ? args.description : ""
-    String source = args.containsKey("source") ? args.source : "Jenkins"
-    String configuration = args.containsKey("configuration") ? args.configuration : ""
+  // check minimum required params
+  if(tagRule == "" ) {
+    echo "tagRule is a mandatory parameter!"
+    return 1
+  }
+  if(description == "" ) {
+    echo "description is a mandatory parameter!"
+    return 1
+  }
+  if(source == "" ) {
+    echo "source is a mandatory parameter!"
+    return 1
+  }
+  if(configuration == "" ) {
+    echo "configuration is a mandatory parameter!"
+    return 1
+  }
 
-    def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
+  def postBody = [
+    eventType: eventType,
+    attachRules: [tagRule: tagRule],
+    tags: tagRule[0].tags,
+    description: description,
+    source: source,
+    configuration: configuration,
+    customProperties: customProperties
+  ]
 
-    // check minimum required params
-    if(tagRule == "" ) {
-        echo "tagRule is a mandatory parameter!"
-        return 1
-    }
-    if(description == "" ) {
-        echo "description is a mandatory parameter!"
-        return 1
-    }
-    if(source == "" ) {
-        echo "source is a mandatory parameter!"
-        return 1
-    }
-    if(configuration == "" ) {
-        echo "configuration is a mandatory parameter!"
-        return 1
-    }
-
-    def postBody = [
-      eventType: eventType,
-      attachRules: [tagRule: tagRule],
-      tags: tagRule[0].tags,
-      description: description,
-      source: source,
-      configuration: configuration,
-      customProperties: customProperties
-    ]
-
-    def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
-      customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
-      httpMode: 'POST',
-      requestBody: JsonOutput.toJson(postBody),
-      responseHandle: 'STRING',
-      url: "${dtTenantUrl}/api/v1/events",
-      validResponseCodes: "200:403",
-      ignoreSslErrors: true
-
-      if (createEventResponse.status == 200) {
-        echo "Custom info event posted successfully!"
-      } else {
-        echo "Failed To post event:" + createEventResponse.content
-        return false
-      }
-
-    return true
+  println "Posting Configuration event..."
+  return sendDynatraceEvent(postBody)
 }
 
 private boolean pushDynatraceDeploymentEvent( Map args ) {
   // check input arguments
   String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_DEPLOYMENT"
-  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
-  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
-  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
   String source = args.containsKey("source") ? args.source : "Jenkins"
-
   String deploymentName = args.containsKey("deploymentName") ? args.deploymentName : "${env.JOB_NAME}"
   String deploymentVersion = args.containsKey("deploymentVersion") ? args.deploymentVersion : "${env.VERSION}"
   String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
   String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
   String remediationAction = args.containsKey("remediationAction") ? args.remediationAction : "null"
-
-  println "Posting Custom Deployment event..."
-
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
   // check minimum required params
@@ -165,16 +158,16 @@ private boolean pushDynatraceDeploymentEvent( Map args ) {
     return 1
   }
   if(deploymentName == "" ) {
-      echo "deploymentName is a mandatory parameter!"
-      return 1
+    echo "deploymentName is a mandatory parameter!"
+    return 1
   }
   if(source == "" ) {
-      echo "source is a mandatory parameter!"
-      return 1
+    echo "source is a mandatory parameter!"
+    return 1
   }
   if(deploymentVersion == "" ) {
-      echo "deploymentVersion is a mandatory parameter!"
-      return 1
+    echo "deploymentVersion is a mandatory parameter!"
+    return 1
   }
 
   def postBody = [
@@ -190,37 +183,21 @@ private boolean pushDynatraceDeploymentEvent( Map args ) {
     source: source
   ]
 
-  def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
-    customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
-    httpMode: 'POST',
-    requestBody: JsonOutput.toJson(postBody),
-    responseHandle: 'STRING',
-    url: "${dtTenantUrl}/api/v1/events",
-    validResponseCodes: "200:403",
-    ignoreSslErrors: true
+  println "Posting Custom Deployment event..."
+  return sendDynatraceEvent(postBody)
 
-    if (createEventResponse.status == 200) {
-      echo "Custom info event posted successfully!"
-    } else {
-      echo "Failed To post event:" + createEventResponse.content
-      return false
-    }
-
-  return true
 }
 
 private boolean pushDynatraceInfoEvent( Map args ) {
 
   // check input arguments
-  String eventType = args.eventType
+  String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_INFO"
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
-  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
   String source = args.containsKey("source") ? args.source : "Jenkins"
-
   String description = args.containsKey("description") ? args.description : ""
   String title = args.containsKey("title") ? args.title : ""
-
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
   // check minimum required params
@@ -229,12 +206,12 @@ private boolean pushDynatraceInfoEvent( Map args ) {
     return 1
   }
   if(source == "" ) {
-      echo "source is a mandatory parameter!"
-      return 1
+    echo "source is a mandatory parameter!"
+    return 1
   }
   if(description == "" ) {
-      echo "description is a mandatory parameter!"
-      return 1
+    echo "description is a mandatory parameter!"
+    return 1
   }
 
   def postBody = [
@@ -247,36 +224,18 @@ private boolean pushDynatraceInfoEvent( Map args ) {
     tags: tagRule[0].tags
   ]
 
-  def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
-    customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
-    httpMode: 'POST',
-    requestBody: JsonOutput.toJson(postBody),
-    responseHandle: 'STRING',
-    url: "${dtTenantUrl}/api/v1/events",
-    validResponseCodes: "200:403",
-    ignoreSslErrors: true
-
-    if (createEventResponse.status == 200) {
-      echo "Custom info event posted successfully!"
-    } else {
-      echo "Failed To post event:" + createEventResponse.content
-      return false
-    }
-
-  return true
+  println "Posting Info event..."
+  return sendDynatraceEvent(postBody)
 }
 
 def pushDynatraceErrorEvent( Map args ) {
 
   // check input arguments
-  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
-  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
-  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  String eventType = args.containsKey("eventType") ? args.eventType : "ERROR_EVENT"
   String source = args.containsKey("source") ? args.source : "Jenkins"
-
   String description = args.containsKey("description") ? args.description : ""
   String title = args.containsKey("title") ? args.title : ""
-
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
   def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
   // check minimum required params
@@ -285,20 +244,17 @@ def pushDynatraceErrorEvent( Map args ) {
     return 1
   }
   if(source == "" ) {
-      echo "source is a mandatory parameter!"
-      return 1
+    echo "source is a mandatory parameter!"
+    return 1
   }
   if(description == "" ) {
-      echo "description is a mandatory parameter!"
-      return 1
+    echo "description is a mandatory parameter!"
+    return 1
   }
-  
   if(title == "" ) {
-      echo "title is a mandatory parameter!"
-      return 1
+    echo "title is a mandatory parameter!"
+    return 1
   }
-
-  String eventType = "ERROR_EVENT"
 
   def postBody = [
     eventType: eventType,
@@ -310,23 +266,174 @@ def pushDynatraceErrorEvent( Map args ) {
     tags: tagRule[0].tags
   ]
 
-  def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
-    customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
-    httpMode: 'POST',
-    requestBody: JsonOutput.toJson(postBody),
-    responseHandle: 'STRING',
-    url: "${dtTenantUrl}/api/v1/events",
-    validResponseCodes: "200:403",
-    ignoreSslErrors: true
+  println "Posting Error event..."
+  return sendDynatraceEvent(postBody)
+}
 
-    if (createEventResponse.status == 200) {
-      echo "Custom info event posted successfully!"
-    } else {
-      echo "Failed To post event:" + createEventResponse.content
-      return false
-    }
+def pushDynatraceMarkedForTerminationEvent( Map args ) {
 
-  return true
+  // check input arguments
+  String eventType = args.containsKey("eventType") ? args.eventType : "MARKED_FOR_TERMINATION"
+  String source = args.containsKey("source") ? args.source : "Jenkins"
+  String description = args.containsKey("description") ? args.description : ""
+  String title = args.containsKey("title") ? args.title : ""
+  String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
+
+  // check minimum required params
+  if(tagRule == "" ) {
+    echo "tagRule is a mandatory parameter!"
+    return 1
+  }
+  if(source == "" ) {
+    echo "source is a mandatory parameter!"
+    return 1
+  }
+  if(description == "" ) {
+    echo "description is a mandatory parameter!"
+    return 1
+  }
+
+  def postBody = [
+    eventType: eventType,
+    attachRules: [tagRule: tagRule],
+    description: description,
+    title: title,
+    ciBackLink: ciBackLink,
+    customProperties: customProperties,
+    source: source,
+    tags: tagRule[0].tags
+  ]
+
+  println "Posting Marked For Termination event..."
+  return sendDynatraceEvent(postBody)
+}
+
+def pushDynatraceAvailabilityEvent( Map args ) {
+
+  // check input arguments
+  String eventType = args.containsKey("eventType") ? args.eventType : "AVAILABILITY_EVENT"
+  String source = args.containsKey("source") ? args.source : "Jenkins"
+  String description = args.containsKey("description") ? args.description : ""
+  String title = args.containsKey("title") ? args.title : ""
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
+
+  // check minimum required params
+  if(tagRule == "" ) {
+    echo "tagRule is a mandatory parameter!"
+    return 1
+  }
+  if(source == "" ) {
+    echo "source is a mandatory parameter!"
+    return 1
+  }
+  if(description == "" ) {
+    echo "description is a mandatory parameter!"
+    return 1
+  }
+  if(title == "" ) {
+    echo "title is a mandatory parameter!"
+    return 1
+  }
+
+  def postBody = [
+    eventType: eventType,
+    attachRules: [tagRule: tagRule],
+    description: description,
+    title: title,
+    customProperties: customProperties,
+    source: source,
+    tags: tagRule[0].tags
+  ]
+
+  println "Posting Availability event..."
+  return sendDynatraceEvent(postBody)
+}
+
+def pushDynatracePerformanceEvent( Map args ) {
+
+  // check input arguments
+  String eventType = args.containsKey("eventType") ? args.eventType : "PERFORMANCE_EVENT"
+  String source = args.containsKey("source") ? args.source : "Jenkins"
+  String description = args.containsKey("description") ? args.description : ""
+  String title = args.containsKey("title") ? args.title : ""
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
+
+  // check minimum required params
+  if(tagRule == "" ) {
+    echo "tagRule is a mandatory parameter!"
+    return 1
+  }
+  if(source == "" ) {
+    echo "source is a mandatory parameter!"
+    return 1
+  }
+  if(description == "" ) {
+    echo "description is a mandatory parameter!"
+    return 1
+  }
+  if(title == "" ) {
+    echo "title is a mandatory parameter!"
+    return 1
+  }
+
+  def postBody = [
+    eventType: eventType,
+    attachRules: [tagRule: tagRule],
+    description: description,
+    title: title,
+    customProperties: customProperties,
+    source: source,
+    tags: tagRule[0].tags
+  ]
+
+  println "Posting Performance event..."
+  return sendDynatraceEvent(postBody)
+}
+
+def pushDynatraceResourceContentionEvent( Map args ) {
+
+  // check input arguments
+  String eventType = args.containsKey("eventType") ? args.eventType : "RESOURCE_CONTENTION"
+  String source = args.containsKey("source") ? args.source : "Jenkins"
+  String description = args.containsKey("description") ? args.description : ""
+  String title = args.containsKey("title") ? args.title : ""
+  def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+  def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
+
+  // check minimum required params
+  if(tagRule == "" ) {
+    echo "tagRule is a mandatory parameter!"
+    return 1
+  }
+  if(source == "" ) {
+    echo "source is a mandatory parameter!"
+    return 1
+  }
+  if(description == "" ) {
+    echo "description is a mandatory parameter!"
+    return 1
+  }
+  if(title == "" ) {
+    echo "title is a mandatory parameter!"
+    return 1
+  }
+
+  def postBody = [
+    eventType: eventType,
+    attachRules: [tagRule: tagRule],
+    description: description,
+    title: title,
+    customProperties: customProperties,
+    source: source,
+    tags: tagRule[0].tags
+  ]
+
+  println "Posting Resource Contention event..."
+  return sendDynatraceEvent(postBody)
 }
 
 return this
