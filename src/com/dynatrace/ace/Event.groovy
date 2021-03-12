@@ -31,10 +31,7 @@ boolean pushDynatraceEvent( Map args ) {
 }
 
 // shared private function that make the API call to Dynatrace. 
-private boolean sendDynatraceEvent( Map postBody ) {
-
-  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
-  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
+private boolean sendDynatraceEvent( String dtTenantUrl, String dtApiToken, Map postBody ) {
 
   def createEventResponse = httpRequest contentType: 'APPLICATION_JSON', 
     customHeaders: [[maskValue: true, name: 'Authorization', value: "Api-Token ${dtApiToken}"]], 
@@ -56,6 +53,8 @@ private boolean sendDynatraceEvent( Map postBody ) {
 
 private boolean pushDynatraceAnnotationEvent( Map args ) {
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_ANNOTATION"
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
@@ -96,11 +95,13 @@ private boolean pushDynatraceAnnotationEvent( Map args ) {
   ]
 
   println "Posting Annotation event..."
-  return sendDynatraceEvent(postBody)
+  return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
 private boolean pushDynatraceConfigurationEvent(Map args){
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_CONFIGURATION"
   String description = args.containsKey("description") ? args.description : ""
   String source = args.containsKey("source") ? args.source : "Jenkins"
@@ -137,11 +138,13 @@ private boolean pushDynatraceConfigurationEvent(Map args){
   ]
 
   println "Posting Configuration event..."
-  return sendDynatraceEvent(postBody)
+  return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
 private boolean pushDynatraceDeploymentEvent( Map args ) {
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_DEPLOYMENT"
   String source = args.containsKey("source") ? args.source : "Jenkins"
   String deploymentName = args.containsKey("deploymentName") ? args.deploymentName : "${env.JOB_NAME}"
@@ -184,13 +187,15 @@ private boolean pushDynatraceDeploymentEvent( Map args ) {
   ]
 
   println "Posting Custom Deployment event..."
-  return sendDynatraceEvent(postBody)
+  return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 
 }
 
 private boolean pushDynatraceInfoEvent( Map args ) {
 
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "CUSTOM_INFO"
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
@@ -225,12 +230,14 @@ private boolean pushDynatraceInfoEvent( Map args ) {
   ]
 
   println "Posting Info event..."
-  return sendDynatraceEvent(postBody)
+  return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
 def pushDynatraceErrorEvent( Map args ) {
 
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "ERROR_EVENT"
   String source = args.containsKey("source") ? args.source : "Jenkins"
   String description = args.containsKey("description") ? args.description : ""
@@ -267,12 +274,14 @@ def pushDynatraceErrorEvent( Map args ) {
   ]
 
   println "Posting Error event..."
-  return sendDynatraceEvent(postBody)
+  return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
 def pushDynatraceMarkedForTerminationEvent( Map args ) {
 
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "MARKED_FOR_TERMINATION"
   String source = args.containsKey("source") ? args.source : "Jenkins"
   String description = args.containsKey("description") ? args.description : ""
@@ -307,12 +316,14 @@ def pushDynatraceMarkedForTerminationEvent( Map args ) {
   ]
 
   println "Posting Marked For Termination event..."
-  return sendDynatraceEvent(postBody)
+  return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
 def pushDynatraceAvailabilityEvent( Map args ) {
 
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "AVAILABILITY_EVENT"
   String source = args.containsKey("source") ? args.source : "Jenkins"
   String description = args.containsKey("description") ? args.description : ""
@@ -349,12 +360,14 @@ def pushDynatraceAvailabilityEvent( Map args ) {
   ]
 
   println "Posting Availability event..."
-  return sendDynatraceEvent(postBody)
+  return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
 def pushDynatracePerformanceEvent( Map args ) {
 
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "PERFORMANCE_EVENT"
   String source = args.containsKey("source") ? args.source : "Jenkins"
   String description = args.containsKey("description") ? args.description : ""
@@ -391,12 +404,14 @@ def pushDynatracePerformanceEvent( Map args ) {
   ]
 
   println "Posting Performance event..."
-  return sendDynatraceEvent(postBody)
+  return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
 def pushDynatraceResourceContentionEvent( Map args ) {
 
   // check input arguments
+  String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+  String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : "RESOURCE_CONTENTION"
   String source = args.containsKey("source") ? args.source : "Jenkins"
   String description = args.containsKey("description") ? args.description : ""
@@ -433,7 +448,7 @@ def pushDynatraceResourceContentionEvent( Map args ) {
   ]
 
   println "Posting Resource Contention event..."
-  return sendDynatraceEvent(postBody)
+  return sendDynatraceEvent(dtTenantUrl,dtApiToken,postBody)
 }
 
 return this
