@@ -10,31 +10,31 @@ Library versions are listed below:
 
 | Library Version | Comment |
 | --------------- | ------- |
-| 1.0 | Initial Release |
-| 1.1 | Converted scripts into classes. Added problem functions. Added and updated README files. Added example jenkinfiles. Remove deprecated Dynatrace push, jmeter, and keptn functions |
+| v1.0 | Initial Release |
+| v1.1 | Converted scripts into classes. Added problem functions. Added and updated README files. Added example jenkinfiles. Remove deprecated Dynatrace push, jmeter, and keptn functions |
 
-*It is recommended to specify the library version in the Jenkinsfile to ensure pipeline stability. For example `@Library('dynatrace@1.1')`*
+*It is recommended to specify the library version in the Jenkinsfile to ensure pipeline stability. For example `@Library('dynatrace@v1.1')`*
 
 ## Library functions:
 
 **1. Push Information Events** 
-  * Send deployment, configuration, and testing Dynatrace informational events. 
-  * [Information Events](PUSHEVENTS.md) for usage details.
+  * Post deployment, configuration, and testing Dynatrace informational events. 
+  * See [Information Events README](POSTEVENTS.md) for usage details.
 
-**2. Problems** 
+**2. Dynatrace Problems** 
   * Add problem comment and close a problem. 
-  * [Information Events](PROBLEM.md) for usage details.
+  * See [Information Events README](PROBLEM.md) for usage details.
 
-**3. Configuration** 
+**3. Dynatrace Configuration** 
   * Dynatrace configuration functions that show various examples to perform Dynatrace configurations, but we encourage you to look at [Dynatrace monitoring as Code](https://github.com/dynatrace-oss/dynatrace-monitoring-as-code) as the recommended approach.
-  * [Configuration](CONFIGURATION.md) for usage details.
+  * See [Configuration README](CONFIGURATION.md) for usage details.
 
 Once you have everything configured use it in your Jenkins Pipeline like this
 
 ```groovy
 
-// Import Dynatrace library
-@Library("dynatrace@master")
+// Import Dynatrace library -- the v1.1 indicates the branch to use.
+@Library("dynatrace@v1.1")
 
 // Initialize the class with the event methods
 def event = new com.dynatrace.ace.Event()
@@ -47,7 +47,8 @@ def status = event.pushDynatraceDeploymentEvent() (
   deploymentProject: "myDeploymentProject",
   remediationAction: "myRemediationAction",
   customProperties : [
-    "Jenkins Build Number": env.BUILD_ID
+      "Jenkins JOB_NAME": "${env.JOB_NAME}",
+      "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
   ]
 )
 
@@ -120,7 +121,7 @@ These values can be set in the **Global properties** section of Jenkins, but the
 
     2 . Secret = The URL to your Dynatrace tenant
     
-    3 . ID = DT_TENANT_URL
+    3 . ID = DT_TENANT_URL -- for example https://xxx.live.dynatrace.com/
   
   ![](./images/creds-secret.png)
 
