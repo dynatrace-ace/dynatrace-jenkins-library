@@ -5,9 +5,9 @@ def event = new com.dynatrace.ace.Event()
 def tagMatchRules = [[
   "meTypes": [ "SERVICE"],
   tags: [
-    ["context": "CONTEXTLESS", "key": "project", "value": "demo"],
-    ["context": "CONTEXTLESS", "key": "stage", "value": "dev"],
-    ["context": "CONTEXTLESS", "key": "service", "value": "simple-web-app-1"]
+    ["context": "CONTEXTLESS", "key": "project", "value": "dt-orders"],
+    ["context": "CONTEXTLESS", "key": "stage", "value": "production"],
+    ["context": "CONTEXTLESS", "key": "service", "value": "frontend"]
   ]
 ]]
 
@@ -24,7 +24,7 @@ pipeline {
                     def status = event.pushDynatraceEvent (
                       eventType: "CUSTOM_DEPLOYMENT",
                       tagRule: tagMatchRules,
-                      deploymentName: "myDeploymentJob: ${env.JOB_NAME}",
+                      deploymentName: "CUSTOM_DEPLOYMENT: ${env.JOB_NAME}",
                       deploymentVersion: "myDeploymentVersion",
                       deploymentProject: "myDeploymentProject",
                       remediationAction: "myRemediationAction",
@@ -42,9 +42,9 @@ pipeline {
                     def status = event.pushDynatraceEvent (
                       eventType: "CUSTOM_ANNOTATION",
                       tagRule: tagMatchRules,
-                      description: "myDescription",
+                      description: "CUSTOM_ANNOTATION myDescription",
                       annotationType: "myAnnotationType",
-                      annotationDescription: "myAnnotationDescription",
+                      annotationDescription: "CUSTOM_ANNOTATION myAnnotationDescription",
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
@@ -59,8 +59,8 @@ pipeline {
                     def status = event.pushDynatraceEvent (
                       eventType: "CUSTOM_CONFIGURATION",
                       tagRule: tagMatchRules,
-                      configuration: "myConfiguration",
-                      description: "myDescription",
+                      configuration: "CUSTOM_CONFIGURATION myConfiguration",
+                      description: "CUSTOM_CONFIGURATION myDescription",
                       source : "mySource",
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
@@ -76,8 +76,8 @@ pipeline {
                     def status = event.pushDynatraceEvent (
                       eventType: "CUSTOM_INFO",
                       tagRule: tagMatchRules,
-                      title: "myInfoTitle",
-                      description: "myInfoDescription",
+                      title: "CUSTOM_INFO myInfoTitle",
+                      description: "CUSTOM_INFO myInfoDescription",
                       source : "mySource",
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
@@ -87,5 +87,90 @@ pipeline {
                   }
             }
         }
+        stage("MARKED_FOR_TERMINATION") {
+            steps {
+                script {
+                    def status = event.pushDynatraceEvent (
+                      eventType: "MARKED_FOR_TERMINATION",
+                      tagRule: tagMatchRules,
+                      title: "MARKED_FOR_TERMINATION myInfoTitle",
+                      description: "MARKED_FOR_TERMINATION myInfoDescription",
+                      source : "mySource",
+                      customProperties : [
+                          "Jenkins JOB_NAME": "${env.JOB_NAME}",
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                      ]
+                    )
+                  }
+            }
+        }
+        stage("AVAILABILITY_EVENT") {
+            steps {
+                script {
+                    def status = event.pushDynatraceEvent (
+                      eventType: "AVAILABILITY_EVENT",
+                      tagRule: tagMatchRules,
+                      title: "AVAILABILITY_EVENT myInfoTitle",
+                      description: "AVAILABILITY_EVENT myInfoDescription",
+                      source : "mySource",
+                      customProperties : [
+                          "Jenkins JOB_NAME": "${env.JOB_NAME}",
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                      ]
+                    )
+                  }
+            }
+        }
+        stage("PERFORMANCE_EVENT") {
+            steps {
+                script {
+                    def status = event.pushDynatraceEvent (
+                      eventType: "PERFORMANCE_EVENT",
+                      tagRule: tagMatchRules,
+                      title: "PERFORMANCE_EVENT myInfoTitle",
+                      description: "PERFORMANCE_EVENT myInfoDescription",
+                      source : "mySource",
+                      customProperties : [
+                          "Jenkins JOB_NAME": "${env.JOB_NAME}",
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                      ]
+                    )
+                  }
+            }
+        }
+        stage("RESOURCE_CONTENTION") {
+            steps {
+                script {
+                    def status = event.pushDynatraceEvent (
+                      eventType: "RESOURCE_CONTENTION",
+                      tagRule: tagMatchRules,
+                      title: "RESOURCE_CONTENTION myInfoTitle",
+                      description: "RESOURCE_CONTENTION myInfoDescription",
+                      source : "mySource",
+                      customProperties : [
+                          "Jenkins JOB_NAME": "${env.JOB_NAME}",
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                      ]
+                    )
+                  }
+            }
+        }
+        stage("ERROR_EVENT") {
+            steps {
+                script {
+                    def status = event.pushDynatraceEvent (
+                      eventType: "ERROR_EVENT",
+                      tagRule: tagMatchRules,
+                      title: "ERROR_EVENT myInfoTitle",
+                      description: "ERROR_EVENT myInfoDescription",
+                      source : "mySource",
+                      customProperties : [
+                          "Jenkins JOB_NAME": "${env.JOB_NAME}",
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                      ]
+                    )
+                  }
+            }
+        }                                
     }
 }
