@@ -1,8 +1,0 @@
-## dt_createUpdateAppDetectionRule
-Used to create a synthetic test in Dynatrace
-
-### *usage:*
-errorCode=dt_dt_createUpdateAppDetectionRule(dtAppName, pattern,applicationMatchType, applicationMatchTarget
-if(errorCode > 0)
-  error "Create or update Web App detection rule failed"
-  

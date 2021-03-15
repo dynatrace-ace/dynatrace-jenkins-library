@@ -1,7 +1,0 @@
-## createSyntheticTest
-Used to create a synthetic test in Dynatrace
-
-### *usage:*
-errorCode=dt_createSyntheticTest(tagRule)
-if(errorCode > 0)
-  error "Pushing event to Dynatrace failed"
