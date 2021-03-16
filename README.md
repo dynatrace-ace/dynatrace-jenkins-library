@@ -12,8 +12,9 @@ Library versions are listed below:
 | --------------- | ------- |
 | v1.0 | Initial Release |
 | v1.1 | Converted scripts into classes. Added problem functions. Added and updated README files. Added example jenkinfiles. Remove deprecated Dynatrace push, jmeter, and keptn functions |
+| v1.2 | Added executeJmeterTest method |
 
-*It is recommended to specify the library version in the Jenkinsfile to ensure pipeline stability. For example `@Library('dynatrace@v1.1')`*
+*It is recommended to specify the library version in the Jenkinsfile to ensure pipeline stability. For example `@Library('dynatrace@v1.2')`*
 
 ## Library functions:
 
@@ -29,12 +30,16 @@ Library versions are listed below:
   * Dynatrace configuration functions that show various examples to perform Dynatrace configurations, but we encourage you to look at [Dynatrace monitoring as Code](https://github.com/dynatrace-oss/dynatrace-monitoring-as-code) as the recommended approach.
   * See [Configuration README](CONFIGURATION.md) for usage details.
 
+**4. Execute Jmeter Test**
+  * Supporting function that allows to run jmeter tests from Jenkins. This function assumes we run on a Jenkins Agent that has JMeter installed 
+  * See [Jmeter README](JMETER.md) for usage details
+
 Once you have everything configured use it in your Jenkins Pipeline like this
 
 ```groovy
 
 // Import Dynatrace library -- the v1.1 indicates the branch to use.
-@Library("dynatrace@v1.1")
+@Library("dynatrace@v1.2")
 
 // Initialize the class with the event methods
 def event = new com.dynatrace.ace.Event()

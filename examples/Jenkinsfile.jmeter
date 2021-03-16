@@ -1,0 +1,37 @@
+// replace 'master' with the library version you are using
+@Library("dynatrace@master")
+def jmeter = new com.dynatrace.ace.Jmeter()
+
+pipeline {
+    agent jmeter
+    environment {
+      DT_TENANT_URL = credentials('DT_TENANT_URL')
+    	DT_API_TOKEN = credentials('DT_API_TOKEN')
+    }
+    stages {
+      stage('Run performance test') {
+        steps {
+            container('jmeter') {
+                script {
+                    def status = jmeter.executeJmeterTest ( 
+                        scriptName: "jmeter/simplenodeservice_load.jmx",
+                        resultsDir: "perfCheck_${env.APP_NAME}_staging_${BUILD_NUMBER}",
+                        serverUrl: "simplenodeservice.staging", 
+                        serverPort: 80,
+                        checkPath: '/health',
+                        vuCount: env.VU.toInteger(),
+                        loopCount: env.LOOPCOUNT.toInteger(),
+                        LTN: "perfCheck_${env.APP_NAME}_${BUILD_NUMBER}",
+                        funcValidation: false,
+                        avgRtValidation: 4000
+                    )
+                    if (status != 0) {
+                        currentBuild.result = 'FAILED'
+                        error "Performance test in staging failed."
+                    }
+                }
+            }
+        }
+      }
+    }
+}
