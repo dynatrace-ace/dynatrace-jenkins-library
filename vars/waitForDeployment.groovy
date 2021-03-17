@@ -30,5 +30,8 @@ def call( Map args )
         i++
     }
 
+    // Wait for pod to start accepting HTTP requests
+    sleep (10)
+
     return result.isInteger() ? result.toInteger() : 1
 }
