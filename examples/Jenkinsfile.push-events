@@ -18,7 +18,7 @@ pipeline {
                       eventType: "CUSTOM_DEPLOYMENT",
                       title: "New Deployment: ${env.JOB_NAME}",
                       entitySelector: selector,
-                      customProperties : [
+                      porperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                           "dt.event.deployment.name":"${env.JOB_NAME}",
@@ -26,10 +26,10 @@ pipeline {
                           "dt.event.deployment.release_stage": "production" ,
                           "dt.event.deployment.release_product": "frontend",
                           "dt.event.deployment.release_build_version": "123",
-                          "approver": "Jason Miller",
+                          "approver": "<responsible Team/Person>",
                           "dt.event.deployment.ci_back_link": "https://pipelines/easytravel/123",
-                          "gitcommit": "e5a6baac7eb",
-                          "change-request": "CR-42",
+                          "gitcommit": "<git-commit-id>",
+                          "change-request": "<Change-Request-ID>",
                           "dt.event.deployment.remediation_action_link": "https://url.com",
                           "dt.event.is_rootcause_relevant": true
                       ]
@@ -44,8 +44,7 @@ pipeline {
                       eventType: "CUSTOM_ANNOTATION",
                       title: "Lorem ipsum dolor sit amet",
                       entitySelector: selector,
-                      annotationDescription: "CUSTOM_ANNOTATION myAnnotationDescription",
-                      customProperties : [
+                      properties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}",
                           "dt.event.description": "myDescription",
@@ -62,7 +61,7 @@ pipeline {
                       eventType: "CUSTOM_CONFIGURATION",
                       title: "Lorem ipsum dolor sit amet",
                       entitySelector: selector,
-                      customProperties : [
+                      properties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                           "dt.event.description": "myDescription",
@@ -79,7 +78,7 @@ pipeline {
                       eventType: "CUSTOM_INFO",
                       title: "Lorem ipsum dolor sit amet",
                       entitySelector: selector,
-                      customProperties : [
+                      properties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                           "dt.event.description": "myDescription",
@@ -96,7 +95,7 @@ pipeline {
                       eventType: "MARKED_FOR_TERMINATION",
                       title: "Lorem ipsum dolor sit amet",
                       entitySelector: selector,
-                      customProperties : [
+                      properties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                           "dt.event.description": "myDescription",
@@ -113,7 +112,7 @@ pipeline {
                       eventType: "AVAILABILITY_EVENT",
                       title: "Lorem ipsum dolor sit amet",
                       entitySelector: selector,
-                      customProperties : [
+                      properties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                           "dt.event.description": "myDescription",
@@ -130,7 +129,7 @@ pipeline {
                       eventType: "PERFORMANCE_EVENT",
                       title: "Lorem ipsum dolor sit amet",
                       entitySelector: selector,
-                      customProperties : [
+                      properties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                           "dt.event.description": "myDescription",
@@ -147,7 +146,7 @@ pipeline {
                       eventType: "RESOURCE_CONTENTION",
                       title: "Lorem ipsum dolor sit amet",
                       entitySelector: selector,
-                      customProperties : [
+                      properties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                           "dt.event.description": "myDescription",
@@ -164,7 +163,7 @@ pipeline {
                       eventType: "ERROR_EVENT",
                       title: "Lorem ipsum dolor sit amet",
                       entitySelector: selector,
-                      customProperties : [
+                      properties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
                           "dt.event.description": "myDescription",
