@@ -2,14 +2,7 @@
 @Library("dynatrace@master")
 def event = new com.dynatrace.ace.Event()
 
-def tagMatchRules = [[
-  "meTypes": [ "SERVICE"],
-  tags: [
-    ["context": "CONTEXTLESS", "key": "project", "value": "dt-orders"],
-    ["context": "CONTEXTLESS", "key": "stage", "value": "production"],
-    ["context": "CONTEXTLESS", "key": "service", "value": "frontend"]
-  ]
-]]
+def selector = "type(PROCESS_GROUP_INSTANCE),entityName(nginx)"
 
 pipeline {
     agent any
@@ -23,14 +16,22 @@ pipeline {
                 script {
                     def status = event.pushDynatraceEvent (
                       eventType: "CUSTOM_DEPLOYMENT",
-                      tagRule: tagMatchRules,
-                      deploymentName: "CUSTOM_DEPLOYMENT: ${env.JOB_NAME}",
-                      deploymentVersion: "myDeploymentVersion",
-                      deploymentProject: "myDeploymentProject",
-                      remediationAction: "myRemediationAction",
+                      title: "New Deployment: ${env.JOB_NAME}",
+                      entitySelector: selector,
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                          "dt.event.deployment.name":"${env.JOB_NAME}",
+                          "dt.event.deployment.version": "1.1",
+                          "dt.event.deployment.release_stage": "production" ,
+                          "dt.event.deployment.release_product": "frontend",
+                          "dt.event.deployment.release_build_version": "123",
+                          "approver": "Jason Miller",
+                          "dt.event.deployment.ci_back_link": "https://pipelines/easytravel/123",
+                          "gitcommit": "e5a6baac7eb",
+                          "change-request": "CR-42",
+                          "dt.event.deployment.remediation_action_link": "https://url.com",
+                          "dt.event.is_rootcause_relevant": true
                       ]
                     )
                   }
@@ -41,13 +42,14 @@ pipeline {
                 script {
                     def status = event.pushDynatraceEvent (
                       eventType: "CUSTOM_ANNOTATION",
-                      tagRule: tagMatchRules,
-                      description: "CUSTOM_ANNOTATION myDescription",
-                      annotationType: "myAnnotationType",
+                      title: "Lorem ipsum dolor sit amet",
+                      entitySelector: selector,
                       annotationDescription: "CUSTOM_ANNOTATION myAnnotationDescription",
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
-                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                          "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}",
+                          "dt.event.description": "myDescription",
+                          "dt.event.source": "Jenkins"
                       ]
                     )
                   }
@@ -58,13 +60,13 @@ pipeline {
                 script {
                     def status = event.pushDynatraceEvent (
                       eventType: "CUSTOM_CONFIGURATION",
-                      tagRule: tagMatchRules,
-                      configuration: "CUSTOM_CONFIGURATION myConfiguration",
-                      description: "CUSTOM_CONFIGURATION myDescription",
-                      source : "mySource",
+                      title: "Lorem ipsum dolor sit amet",
+                      entitySelector: selector,
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                          "dt.event.description": "myDescription",
+                          "dt.event.source": "Jenkins"
                       ]
                     )
                   }
@@ -75,13 +77,13 @@ pipeline {
                 script {
                     def status = event.pushDynatraceEvent (
                       eventType: "CUSTOM_INFO",
-                      tagRule: tagMatchRules,
-                      title: "CUSTOM_INFO myInfoTitle",
-                      description: "CUSTOM_INFO myInfoDescription",
-                      source : "mySource",
+                      title: "Lorem ipsum dolor sit amet",
+                      entitySelector: selector,
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                          "dt.event.description": "myDescription",
+                          "dt.event.source": "Jenkins"
                       ]
                     )
                   }
@@ -92,13 +94,13 @@ pipeline {
                 script {
                     def status = event.pushDynatraceEvent (
                       eventType: "MARKED_FOR_TERMINATION",
-                      tagRule: tagMatchRules,
-                      title: "MARKED_FOR_TERMINATION myInfoTitle",
-                      description: "MARKED_FOR_TERMINATION myInfoDescription",
-                      source : "mySource",
+                      title: "Lorem ipsum dolor sit amet",
+                      entitySelector: selector,
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                          "dt.event.description": "myDescription",
+                          "dt.event.source": "Jenkins"
                       ]
                     )
                   }
@@ -109,13 +111,13 @@ pipeline {
                 script {
                     def status = event.pushDynatraceEvent (
                       eventType: "AVAILABILITY_EVENT",
-                      tagRule: tagMatchRules,
-                      title: "AVAILABILITY_EVENT myInfoTitle",
-                      description: "AVAILABILITY_EVENT myInfoDescription",
-                      source : "mySource",
+                      title: "Lorem ipsum dolor sit amet",
+                      entitySelector: selector,
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                          "dt.event.description": "myDescription",
+                          "dt.event.source": "Jenkins"
                       ]
                     )
                   }
@@ -126,13 +128,13 @@ pipeline {
                 script {
                     def status = event.pushDynatraceEvent (
                       eventType: "PERFORMANCE_EVENT",
-                      tagRule: tagMatchRules,
-                      title: "PERFORMANCE_EVENT myInfoTitle",
-                      description: "PERFORMANCE_EVENT myInfoDescription",
-                      source : "mySource",
+                      title: "Lorem ipsum dolor sit amet",
+                      entitySelector: selector,
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                          "dt.event.description": "myDescription",
+                          "dt.event.source": "Jenkins"
                       ]
                     )
                   }
@@ -143,13 +145,13 @@ pipeline {
                 script {
                     def status = event.pushDynatraceEvent (
                       eventType: "RESOURCE_CONTENTION",
-                      tagRule: tagMatchRules,
-                      title: "RESOURCE_CONTENTION myInfoTitle",
-                      description: "RESOURCE_CONTENTION myInfoDescription",
-                      source : "mySource",
+                      title: "Lorem ipsum dolor sit amet",
+                      entitySelector: selector,
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                          "dt.event.description": "myDescription",
+                          "dt.event.source": "Jenkins"
                       ]
                     )
                   }
@@ -160,13 +162,13 @@ pipeline {
                 script {
                     def status = event.pushDynatraceEvent (
                       eventType: "ERROR_EVENT",
-                      tagRule: tagMatchRules,
-                      title: "ERROR_EVENT myInfoTitle",
-                      description: "ERROR_EVENT myInfoDescription",
-                      source : "mySource",
+                      title: "Lorem ipsum dolor sit amet",
+                      entitySelector: selector,
                       customProperties : [
                           "Jenkins JOB_NAME": "${env.JOB_NAME}",
                           "Jenkins BUILD_NUMBER": "${env.BUILD_NUMBER}"
+                          "dt.event.description": "myDescription",
+                          "dt.event.source": "Jenkins"
                       ]
                     )
                   }
