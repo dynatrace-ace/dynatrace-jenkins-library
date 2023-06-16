@@ -56,6 +56,10 @@ def sendDynatraceEvent( String dtTenantUrl, String dtApiToken, Map postBody ) {
 
 def pushDynatraceEvent( Map args ) {
   // check input arguments
+  if (!checkEventType(args)) {
+    return 1
+  }
+
   String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
   String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
   String eventType = args.containsKey("eventType") ? args.eventType : ""
@@ -64,8 +68,8 @@ def pushDynatraceEvent( Map args ) {
   def properties = args.containsKey("properties") ? args.properties : [ ]
 
   // check minimum required params
-  if(entitySelector == "" ) {
-    echo "entitySelector is a mandatory parameter!"
+  if(eventType == "" ) {
+    echo "eventType is a mandatory parameter!"
     return 1
   }
   if(title == "" ) {
